@@ -51,7 +51,7 @@ def upload_material_view(request):
             material = form.save(commit=False)
             material.uploader = request.user
             material.save()
-            return redirect('materials_home')
+            return redirect('materials')
     else:
         form = MaterialForm()
     
