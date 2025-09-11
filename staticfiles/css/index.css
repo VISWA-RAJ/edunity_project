@@ -13,8 +13,15 @@ body {
   background-attachment: fixed;
   background-position: center;
   color: #f0f0f0;
-}
 
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* --- Sticky Footer Wrapper --- */
+.content-wrapper {
+  flex-grow: 1; /* This is the magic line that pushes the footer down */
+}
 /* Header */
 header {
   background-color: rgba(0, 0, 0, 0.6);
@@ -2298,6 +2305,8 @@ td {
   background-color: #00bfa5;
 }
 
+
+
 /* --- Game Fullscreen Styles --- */
 
 /* This targets our main game container when it's in fullscreen */
@@ -2816,11 +2825,11 @@ td {
 /* --- New Footer and About Page Styles --- */
 
 /* Footer */
-.site-footer {
-  background-color: rgba(10, 20, 30, 0.8);
+site-footer {
+  background-color: rgba(10, 20, 30, 0.85); /* Slightly more opaque */
   border-top: 1px solid rgba(0, 255, 208, 0.2);
-  padding: 25px 50px;
-  margin-top: 60px; /* Pushes footer down from content */
+  padding: 50px 50px; /* Increased padding to make it bigger */
+  margin-top: auto; /* This is part of the sticky footer fix */
 }
 
 .footer-content {
@@ -2829,18 +2838,32 @@ td {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-info .logo {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+footer-info p {
   color: #aaa;
+  font-size: 0.2rem; 
 }
 
 .footer-nav a {
-  color: #aaa;
+  color: #ccc;
   text-decoration: none;
-  margin-left: 20px;
+  margin-left: 25px;
+  font-size: 0.9rem; 
+  font-weight: 500;
   transition: color 0.3s;
 }
 
 .footer-nav a:hover {
   color: #00ffd0;
+  text-decoration: underline;
 }
 
 /* About Us Page */
@@ -3300,4 +3323,128 @@ td {
 /* This ensures the logo text keeps its original color */
 .logo-link .logo {
   color: #00ffd0;
+}
+
+/* --- Django Messages Styling --- */
+
+.messages-container {
+  max-width: 900px;
+  margin: -20px auto 20px auto; /* Position it nicely below the hero */
+  padding: 0 20px;
+}
+
+.message {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.message.success {
+  background-color: rgba(0, 255, 208, 0.2);
+  border: 1px solid #00ffd0;
+  color: #00ffd0;
+}
+
+.message.error {
+  background-color: rgba(255, 75, 75, 0.2);
+  border: 1px solid #ff4b4b;
+  color: #ff4b4b;
+}
+
+/* ==========================================================================
+   GAME MODULE - MOBILE RESPONSIVE STYLES
+   ========================================================================== */
+
+/* By default on desktop, the on-screen controls are hidden */
+.mobile-controls {
+  display: none;
+}
+
+/* These styles will ONLY apply on screens 900px wide or smaller */
+@media (max-width: 900px) {
+
+  /* --- 1. Responsive Layout for Game Pages --- */
+  .game-area-wrapper {
+    /* Stack the leaderboard and the game vertically */
+    flex-direction: column;
+    align-items: center;
+  }
+  .game-leaderboard-container {
+    flex-basis: auto; /* Allow it to resize */
+    width: 100%;
+    max-width: 500px; /* But don't let it get too wide on tablets */
+  }
+
+  /* --- 2. On-Screen Game Controls (Visible only on mobile) --- */
+  .mobile-controls {
+    display: grid; /* This makes the buttons visible */
+    margin-top: 20px;
+    width: 210px;
+    height: 140px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Positioning for Dino Run controls */
+  .jump-btn { grid-column: 1 / -1; grid-row: 1; font-weight: bold; }
+  .duck-btn { grid-column: 1 / -1; grid-row: 2; font-weight: bold; }
+
+ 
+    .d-pad-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    width: 100px; /* Button width */
+    height: 100px; /* Button height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+    .d-pad-btn:active {
+    background-color: #00ffd0;
+  }
+
+
+    .dino-controls { 
+      flex-direction: column; 
+      gap: 10px; 
+      height: auto; 
+      width: 100%; 
+      max-width: 220px; 
+  }
+  .dino-controls .d-pad-btn {
+      width: 100%;
+      height: 60px;
+      border-radius: 20px;
+      font-weight: bold;
+  }
+}
+
+
+/* --- New Personalized Leaderboard Styles --- */
+.leaderboard .current-user-row {
+  background-color: rgba(0, 255, 208, 0.15);
+  font-weight: bold;
+}
+.leaderboard .separator-row td {
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 5px;
+  color: #555;
+  border: none;
+}
+.profile-main-rank {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  color: #ccc;
+  font-weight: 500;
 }
