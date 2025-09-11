@@ -23,7 +23,7 @@ DEBUG = True
 
 # --- REQUIRED for deployment: Add your live website's domain name here ---
 # Example: ALLOWED_HOSTS = ['roshan.pythonanywhere.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 
 
 # ==============================================================================
