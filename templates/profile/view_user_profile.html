@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile.user.username }}'s Profile{% endblock %}
+
+{% block content %}
+  <div class="profile-container">
+    <aside class="profile-sidebar">
+      <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-picture">
+      <div class="profile-info">
+        <h1 class="profile-username">{{ profile.user.username }}</h1>
+        <p class="profile-email">{{ profile.user.email }}</p>
+        <div class="profile-rank">{{ rank }}</div>
+        <div class="profile-points">{{ profile.points }} Points</div>
+      </div>
+      
+      {# --- DYNAMIC FRIENDSHIP BUTTON LOGIC --- #}
+      {% if is_friend %}
+        {# We don't have remove friend functionality from this page yet #}
+        <button class="friend-btn" disabled>Friends</button>
+      {% elif request_sent %}
+        <button class="friend-btn" disabled>Request Sent</button>
+      {% elif request_received %}
+         <button class="friend-btn" disabled>Request Received</button>
+      {% else %}
+        <form action="{% url 'send_friend_request' profile.user.username %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="friend-btn add-friend">Send Friend Request</button>
+        </form>
+      {% endif %}
+
+    </aside>
+<main class="profile-main">
+  <div class="bio-section">
+    <h2>About {{ profile.user.username }}</h2>
+    <p>{{ profile.bio|default:"This user has not added a bio yet."|linebreaksbr }}</p>
+  </div>
+
+  {# --- NEW SECTION TO SHOW FRIENDS --- #}
+  {% if is_friend %}
+    <div class="friends-section">
+      <h2>Friends ({{ friends_of_viewed_user.count }})</h2>
+      <div class="friends-list">
+        {% for friend_profile in friends_of_viewed_user %}
+          <a href="{% url 'view_user_profile' friend_profile.user.username %}" class="friend-card">
+            <img src="{{ friend_profile.image.url }}" alt="{{ friend_profile.user.username }}">
+            <span>{{ friend_profile.user.username }}</span>
+          </a>
+        {% empty %}
+          <p style="color: #ccc;">This user hasn't added any friends yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+</main>
+  </div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Mini Games - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>🎮 Mini Games</h1>
+    <p>Take a break, play, and have fun with friends!</p>
+  </section>
+  
+  <section class="leaderboard mini-leaderboard">
+    <h2>🏆 Top Players (Total Score)</h2>
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>Player</th><th>Total Game Score</th></tr>
+      </thead>
+      <tbody>
+        {% for player_data in leaderboard %}
+          <tr {% if player_data.user == request.user %}class="current-user-row"{% endif %}>
+            <td>
+              {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}{{ forloop.counter }}{% endif %}
+            </td>
+            <td>{{ player_data.user.username }}</td>
+            <td>{{ player_data.total_score }}</td>
+          </tr>
+        {% endfor %}
+        {% if my_rank > 4 %}
+          <tr class="separator-row"><td colspan="3">...</td></tr>
+          <tr class="current-user-row">
+            <td>{{ my_rank }}</td>
+            <td>{{ request.user.username }} (You)</td>
+            <td>{{ my_total_score }}</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="games-grid">
+    <div class="game-card">
+      <h3>🐍 Snake Game</h3>
+      <p>How long can your snake survive?</p>
+      <a href="{% url 'snake_game' %}">Play Now</a>
+    </div>
+    <div class="game-card">
+      <h3>🐦 Flappy Bird</h3>
+      <p>Navigate the pipes in this classic challenge.</p>
+      <a href="{% url 'flappy_bird' %}">Play Now</a>
+    </div>
+    {# --- NEW DINO GAME CARD --- #}
+    <div class="game-card">
+      <h3>🦖 Dino Run</h3>
+      <p>Jump and duck to avoid the obstacles.</p>
+      <a href="{% url 'dino_game' %}">Play Now</a>
+    </div>
+
+    <div class="game-card">
+      <h3>💰 Coin Collector</h3>
+      <p>Catch coins and dodge the bombs!</p>
+      <a href="{% url 'coin_collector' %}">Play Now</a>
+    </div>
+
+  </section>
+{% endblock %}

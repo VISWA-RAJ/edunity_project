@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Doubt Forum - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Doubt Discussion Forum</h1>
+    <p>Ask your questions or help others with their doubts.</p>
+    <div class="buttons" style="margin-top: 20px;">
+        <a href="{% url 'ask_doubt' %}" style="background-color: #00ffd0; color: #000; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: bold;">Ask a Doubt</a>
+    </div>
+  </section>
+
+  <section class="doubt-feed">
+    <h2>Recent Doubts</h2>
+    {% for doubt in recent_doubts %}
+      <div class="doubt-card">
+        <h3>🧠 {{ doubt.title }}</h3>
+        <p>{{ doubt.description|truncatewords:30 }}</p>
+        <p><small>Asked by: {{ doubt.author.username }} on {{ doubt.created_at|date:"d M Y" }}</small></p>
+        {# --- THIS IS THE CORRECTED LINK --- #}
+        <a href="{% url 'doubt_detail' doubt.id %}">View Replies ({{ doubt.replies.count }})</a>
+      </div>
+    {% empty %}
+      <p style="color: #ccc;">No doubts have been asked yet. Be the first!</p>
+    {% endfor %}
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'doubt_list' %}" style="color: #00ffd0; font-size: 1.1rem; font-weight: bold;">View All Doubts...</a>
+    </div>
+  </section>
+{% endblock %}

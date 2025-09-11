@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Memes & Videos - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>📸 Memes & Videos</h1>
+    <p>Share fun images and videos with friends, or browse the gallery!</p>
+  </section>
+
+  <section class="modules">
+    <div class="card-grid" style="max-width: 900px;">
+      <a href="{% url 'meme_gallery' %}" class="card">
+        <h3>🖼️ View the Gallery</h3>
+        <p>See all the latest posts from the community.</p>
+      </a>
+      <a href="{% url 'post_image_meme' %}" class="card">
+        <h3>➕ Post an Image</h3>
+        <p>Upload a JPG, PNG, or GIF.</p>
+      </a>
+      <a href="{% url 'post_video_meme' %}" class="card">
+        <h3>🔗 Post a Video Link</h3>
+        <p>Share a link from Instagram or YouTube.</p>
+      </a>
+    </div>
+  </section>
+{% endblock %}

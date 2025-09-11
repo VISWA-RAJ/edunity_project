@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Edunity{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<body>
+  <div class="background-overlay"></div>
+  <div class="content-wrapper">
+    <header>
+      
+      <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="logo-link">
+            <div class="logo">Edunity</div>
+      </a>
+
+
+      <nav id="main-nav">
+        {% if user.is_authenticated %}
+          <a href="{% url 'dashboard' %}">Home</a>
+          <a href="{% url 'materials' %}">Materials</a>
+          <a href="{% url 'forum' %}">Forum</a>
+          <a href="{% url 'lost_and_found' %}">Lost & Found</a>
+          <a href="{% url 'polls' %}">Polls</a>
+          <a href="{% url 'notices' %}">Notices</a>
+          <a href="{% url 'memes' %}">Memes</a>
+          <a href="{% url 'games' %}">Games</a>
+          <a href="{% url 'leaderboard' %}">Leaderboard</a>
+          <a href="{% url 'about_us' %}">About</a>
+          <a href="{% url 'my_profile' %}" class="profile-nav-link">
+            Profile
+            {% if total_notifications > 0 %}
+              <span class="notification-badge">{{ total_notifications }}</span>
+            {% endif %}
+          </a>
+          <form action="{% url 'logout' %}" method="post" style="display: inline;"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button type="submit" class="logout-button">Logout</button></form>
+        {% else %}
+          <a href="{% url 'home' %}">Home</a>
+          <a href="{% url 'about_us' %}">About</a>
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'signup' %}" style="font-weight: bold; color: #00ffd0;">Sign Up</a>
+        {% endif %}
+      </nav>
+      <button id="hamburger-btn" class="hamburger-button">
+          <span></span>
+          <span></span>
+          <span></span>
+      </button>
+    </header>
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-info">
+        <div class="logo">Edunity</div>
+        <p>&copy; 2025 EDUnity. All Rights Reserved.</p>
+      </div>
+      <nav class="footer-nav">
+        <a href="{% url 'about_us' %}">About Us</a>
+      </nav>
+    </div>
+  </footer>
+
+  {# --- THIS SCRIPT MAKES THE HAMBURGER MENU WORK --- #}
+  <script>
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mainNav = document.getElementById('main-nav');
+    hamburgerBtn.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+      hamburgerBtn.classList.toggle('active');
+    });
+  </script>
+
+  {# --- THE FIX IS HERE: THIS SCRIPT MAKES THE "SHOW" BUTTON WORK --- #}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Find all the "Show" buttons on the page
+      const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+
+      togglePasswordButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          // Find the password input field that is inside the same wrapper
+          const passwordInput = this.previousElementSibling;
+          
+          // Check the current type and toggle it
+          if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            this.textContent = 'Hide';
+          } else {
+            passwordInput.type = 'password';
+            this.textContent = 'Show';
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

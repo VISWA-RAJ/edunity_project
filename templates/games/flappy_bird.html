@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Flappy Bird - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>🐦 Flappy Bird</h1>
+    <p>Press Spacebar or tap the screen to flap!</p>
+  </section>
+
+  <div class="game-area-wrapper">
+    <div class="game-leaderboard-container">
+      <h3>Top Flappy Bird Players</h3>
+      <table class="leaderboard mini-leaderboard">
+        <tbody>
+          {% for score_entry in top_flappy_scores %}
+            <tr>
+              <td>
+                {% if forloop.counter == 1 %}🥇
+                {% elif forloop.counter == 2 %}🥈
+                {% elif forloop.counter == 3 %}🥉
+                {% endif %}
+              </td>
+              <td>{{ score_entry.user.username }}</td>
+              <td>{{ score_entry.score }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="3" style="text-align: center; color: #ccc;">No high scores yet!</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="gameArea" class="game-canvas-container">
+      <canvas id="gameCanvas" class="flappy-bird-canvas" width="320" height="480"></canvas>
+      <div id="fullscreenIcon">
+        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-4V5h-2v5h5V7h-3z"></path></svg>
+      </div>
+      <div id="startOverlay" class="game-over-overlay" style="display: flex;">
+        <div id="startContent">
+          <h2>Ready to Flap?</h2>
+          <button id="startButton" class="game-reset-button">Start Game</button>
+        </div>
+      </div>
+      <div id="gameOverOverlay" class="game-over-overlay">
+        <h2>Game Over</h2>
+        <p>Your Final Score: <span id="finalScore">0</span></p>
+        {# --- THE FIX: THIS IS NOW A BUTTON, NOT A LINK --- #}
+        <button id="playAgainButton" class="game-reset-button">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  {# --- FULLY CORRECTED JAVASCRIPT LOGIC --- #}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- GETTING ALL ELEMENTS ---
+        const gameArea = document.getElementById('gameArea');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startOverlay = document.getElementById('startOverlay');
+        const startButton = document.getElementById('startButton');
+        const startContent = document.getElementById('startContent');
+        const gameOverOverlay = document.getElementById('gameOverOverlay');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const playAgainButton = document.getElementById('playAgainButton'); // The crucial button
+        const fullscreenIcon = document.getElementById('fullscreenIcon');
+        
+        // --- GAME STATE & CONSTANTS ---
+        const bird = { x: 50, y: 150, width: 34, height: 24, velocity: 0 };
+        const gravity = 0.25;
+        const flapStrength = 4.6;
+        const pipeWidth = 52;
+        const pipeGap = 120;
+        let pipeSpeed = 2;
+        
+        let pipes, score, isGameOver, gameLoopId;
+
+        function getCookie(name) { /* ... (no changes here) ... */ }
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // This function resets the entire game to its starting state
+        function resetGame() {
+            bird.y = 150;
+            bird.velocity = 0;
+            pipes = [];
+            score = 0;
+            isGameOver = false;
+            gameOverOverlay.style.display = 'none'; // Hide the game over screen
+            draw(); // Draw the initial, reset state
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw pipes
+            ctx.fillStyle = '#27ae60';
+            pipes.forEach(pipe => {
+                ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+                ctx.fillRect(pipe.x, pipe.topHeight + pipeGap, pipeWidth, canvas.height - (pipe.topHeight + pipeGap));
+            });
+            // Draw bird
+            ctx.fillStyle = '#f1c40f';
+            ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+            // Draw score
+            ctx.fillStyle = 'white';
+            ctx.font = '30px Segoe UI, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(score, canvas.width / 2, 50);
+        }
+
+        // --- CORE GAME LOOP ---
+        function gameLoop() {
+            if (isGameOver) return;
+            // 1. UPDATE game state
+            bird.velocity += gravity;
+            bird.y += bird.velocity;
+            
+            // Move and manage pipes
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
+                const topHeight = Math.random() * (canvas.height - pipeGap - 100) + 50;
+                pipes.push({ x: canvas.width, topHeight: topHeight, passed: false });
+            }
+            pipes.forEach(pipe => pipe.x -= pipeSpeed);
+            pipes = pipes.filter(pipe => pipe.x + pipeWidth > 0);
+
+            // 2. CHECK for collisions & scoring
+            const birdHitsGroundOrSky = bird.y + bird.height > canvas.height || bird.y < 0;
+            let birdHitsPipe = false;
+            pipes.forEach(pipe => {
+                if (bird.x < pipe.x + pipeWidth && bird.x + bird.width > pipe.x &&
+                   (bird.y < pipe.topHeight || bird.y + bird.height > pipe.topHeight + pipeGap)) {
+                    birdHitsPipe = true;
+                }
+                if (!pipe.passed && bird.x > pipe.x + pipeWidth) {
+                    score++;
+                    pipe.passed = true;
+                }
+            });
+            if (birdHitsGroundOrSky || birdHitsPipe) {
+                gameOver();
+            }
+
+            // 3. DRAW everything
+            draw();
+
+            // 4. REQUEST the next frame
+            requestAnimationFrame(gameLoop);
+        }
+
+        function flap() {
+            if (!isGameOver) {
+                bird.velocity = -flapStrength;
+            }
+        }
+        
+        async function submitScore() { /* ... (no changes here) ... */ }
+        async function submitScore() {
+            try {
+                const response = await fetch('/games/submit-score/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+                    body: JSON.stringify({ game: 'Flappy Bird', score: score })
+                });
+                const result = await response.json();
+                console.log('Score submission result:', result);
+            } catch (error) {
+                console.error('Error submitting score:', error);
+            }
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            finalScoreDisplay.textContent = score;
+            gameOverOverlay.style.display = 'flex';
+            submitScore();
+        }
+
+        function startCountdown() {
+            startOverlay.style.display = 'flex';
+            let count = 3;
+            startContent.innerHTML = `<div class="countdown-text">${count}</div>`;
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    startContent.innerHTML = `<div class="countdown-text">${count}</div>`;
+                } else if (count === 0) {
+                    startContent.innerHTML = `<div class="countdown-text">Go!</div>`;
+                } else {
+                    clearInterval(countdownInterval);
+                    startOverlay.style.display = 'none';
+                    gameLoop(); // Start the animation loop
+                }
+            }, 1000);
+        }
+
+        function toggleFullScreen() { /* ... (no changes here) ... */ }
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                gameArea.requestFullscreen().catch(err => { alert(`Error: ${err.message}`); });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // --- MAIN INITIALIZATION ---
+        function init() {
+            startButton.addEventListener('click', startCountdown);
+            // --- THE FIX: The Play Again button now resets and starts the countdown ---
+            playAgainButton.addEventListener('click', () => {
+                resetGame();
+                startCountdown();
+            });
+            document.addEventListener('keydown', e => { if (e.code === 'Space') flap(); });
+            canvas.addEventListener('click', flap);
+            fullscreenIcon.addEventListener('click', toggleFullScreen);
+            resetGame(); // Prepare the initial game state and draw the first frame
+        }
+        
+        init();
+    });
+  </script>
+{% endblock %}

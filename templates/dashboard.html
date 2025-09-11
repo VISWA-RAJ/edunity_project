@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Welcome, {{ user.username }}!</h1>
+    <p>One Platform. Every Campus Need.</p>
+    <div class="buttons">
+      <a href="{% url 'materials' %}">Get Started</a>
+      <a href="#modules">Browse Modules</a>
+    </div>
+  </section>
+
+  <section class="modules" id="modules">
+    <h2>Explore Our Features</h2>
+    <div class="card-grid">
+      <a href="{% url 'materials' %}" class="card"><h3>📘 Study Materials</h3><p>Share and access study resources.</p></a>
+      <a href="{% url 'lost_and_found' %}" class="card"><h3>🎒 Lost & Found</h3><p>Report and find lost items easily.</p></a>
+      <a href="{% url 'forum' %}" class="card"><h3>💬 Forum</h3><p>Discuss doubts and topics with peers.</p></a>
+      <a href="{% url 'polls' %}" class="card"><h3>📊 Polling</h3><p>Engage with live campus polls.</p></a>
+      <a href="{% url 'notices' %}" class="card"><h3>📢 Notices</h3><p>Stay updated with latest announcements.</p></a>
+      <a href="{% url 'memes' %}" class="card"><h3>✍️ Blog & Memes</h3><p>Read and share blogs or memes.</p></a>
+      <a href="{% url 'games' %}" class="card"><h3>🎮 Mini Games</h3><p>Play fun campus mini-games.</p></a>
+      <a href="{% url 'leaderboard' %}" class="card"><h3>🏆 Leaderboard</h3><p>Top contributors and game scores.</p></a>
+    </div>
+  </section>
+{% endblock %}

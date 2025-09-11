@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Coin Collector - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>💰 Coin Collector</h1>
+    <p>Use Left/Right Arrows or on-screen buttons to Move.</p>
+  </section>
+
+  <div class="game-area-wrapper">
+    <div class="game-leaderboard-container">
+      <h3>Top Collectors</h3>
+      <table class="leaderboard mini-leaderboard">
+        <tbody>
+          {% for score_entry in top_collector_scores %}
+            <tr><td>{% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% endif %}</td><td>{{ score_entry.user.username }}</td><td>{{ score_entry.score }}</td></tr>
+          {% empty %}
+            <tr><td colspan="3" style="text-align: center; color: #ccc;">No high scores yet!</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="gameArea" class="game-canvas-container">
+      <canvas id="gameCanvas" class="invaders-canvas" width="600" height="600"></canvas>
+      <div id="fullscreenIcon">
+        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-4V5h-2v5h5V7h-3z"></path></svg>
+      </div>
+
+      {# --- NEW: Mobile Left/Right Controls --- #}
+      <div class="mobile-controls">
+        <button id="leftBtn" class="d-pad-btn">◀</button>
+        <button id="rightBtn" class="d-pad-btn">▶</button>
+      </div>
+
+      <div id="startOverlay" class="game-over-overlay" style="display: flex;">
+        <div id="startContent"><h2>Ready to Collect?</h2><button id="startButton" class="game-reset-button">Start Game</button></div>
+      </div>
+      <div id="gameOverOverlay" class="game-over-overlay">
+        <h2>Game Over</h2>
+        <p>Your Final Score: <span id="finalScore">0</span></p>
+        <button id="playAgainButton" class="game-reset-button">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- GETTING ALL DOM ELEMENTS ---
+        const gameArea = document.getElementById('gameArea');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startOverlay = document.getElementById('startOverlay');
+        const startButton = document.getElementById('startButton');
+        const startContent = document.getElementById('startContent');
+        const gameOverOverlay = document.getElementById('gameOverOverlay');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const playAgainButton = document.getElementById('playAgainButton');
+        const fullscreenIcon = document.getElementById('fullscreenIcon');
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        
+        let player, items, score, isGameOver, fallSpeed, spawnRate, bombChance;
+        let keys = {};
+        
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        function resetGame() {
+            isGameOver = false;
+            score = 0;
+            fallSpeed = 3.5; 
+            spawnRate = 50;
+            bombChance = 0.35;
+            player = { x: canvas.width / 2 - 30, y: canvas.height - 30, width: 60, height: 20, speed: 8 };
+            items = [];
+            gameOverOverlay.style.display = 'none';
+            draw();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ffd0';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            items.forEach(item => {
+                if (item.type === 'coin') {
+                    ctx.fillStyle = '#f1c40f';
+                    ctx.beginPath();
+                    ctx.arc(item.x + item.size / 2, item.y + item.size / 2, item.size / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.fillRect(item.x, item.y, item.size, item.size);
+                }
+            });
+            ctx.fillStyle = 'white';
+            ctx.font = '24px Segoe UI, sans-serif';
+            ctx.fillText(`Score: ${score}`, 10, 30);
+        }
+
+        let frameCounter = 0;
+        function gameLoop() {
+            if (isGameOver) return;
+            if (keys['ArrowLeft'] && player.x > 0) player.x -= player.speed;
+            if (keys['ArrowRight'] && player.x < canvas.width - player.width) player.x += player.speed;
+            items.forEach((item, index) => {
+                item.y += fallSpeed;
+                if (item.y > canvas.height) items.splice(index, 1);
+                if (item.x < player.x + player.width && item.x + item.size > player.x &&
+                    item.y < player.y + player.height && item.y + item.size > player.y) {
+                    if (item.type === 'coin') {
+                        score++;
+                    } else {
+                        gameOver();
+                    }
+                    items.splice(index, 1);
+                }
+            });
+            frameCounter++;
+            if (frameCounter >= spawnRate) {
+                frameCounter = 0;
+                const type = Math.random() < bombChance ? 'bomb' : 'coin'; 
+                const size = type === 'bomb' ? 20 : 15;
+                items.push({ x: Math.random() * (canvas.width - size), y: -size, size: size, type: type });
+            }
+            fallSpeed += 0.005; 
+            if (spawnRate > 15) spawnRate -= 0.02;
+            if (bombChance < 0.7) bombChance += 0.0002;
+            
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // --- UPDATED EVENT HANDLERS ---
+        function handleKeyDown(e) { keys[e.code] = true; }
+        function handleKeyUp(e) { keys[e.code] = false; }
+        // For touch, simulate key presses
+        function handleTouchStart(e) {
+            e.preventDefault();
+            if (e.target.id === 'leftBtn') keys['ArrowLeft'] = true;
+            if (e.target.id === 'rightBtn') keys['ArrowRight'] = true;
+        }
+        function handleTouchEnd(e) {
+            e.preventDefault();
+            keys['ArrowLeft'] = false;
+            keys['ArrowRight'] = false;
+        }
+        
+        async function submitScore() {
+            try {
+                const response = await fetch('/games/submit-score/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+                    body: JSON.stringify({ game: 'Coin Collector', score: score })
+                });
+                await response.json();
+            } catch (error) {
+                console.error('Error submitting score:', error);
+            }
+        }
+        function gameOver() {
+            isGameOver = true;
+            finalScoreDisplay.textContent = score;
+            gameOverOverlay.style.display = 'flex';
+            submitScore();
+        }
+        function startCountdown() {
+            let count = 3;
+            startContent.innerHTML = `<div class="countdown-text">${count}</div>`;
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) startContent.innerHTML = `<div class="countdown-text">${count}</div>`;
+                else if (count === 0) startContent.innerHTML = `<div class="countdown-text">Go!</div>`;
+                else {
+                    clearInterval(countdownInterval);
+                    startOverlay.style.display = 'none';
+                    gameLoop();
+                }
+            }, 1000);
+        }
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                gameArea.requestFullscreen().catch(err => { alert(`Error: ${err.message}`); });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        function init() {
+            startButton.addEventListener('click', startCountdown);
+            playAgainButton.addEventListener('click', () => { resetGame(); startCountdown(); });
+            fullscreenIcon.addEventListener('click', toggleFullScreen);
+            // Keyboard listeners
+            document.addEventListener('keydown', handleKeyDown);
+            document.addEventListener('keyup', handleKeyUp);
+            // --- NEW TOUCH LISTENERS ---
+            leftBtn.addEventListener('mousedown', handleTouchStart);
+            leftBtn.addEventListener('mouseup', handleTouchEnd);
+            leftBtn.addEventListener('touchstart', handleTouchStart, { passive: false });
+            leftBtn.addEventListener('touchend', handleTouchEnd);
+            rightBtn.addEventListener('mousedown', handleTouchStart);
+            rightBtn.addEventListener('mouseup', handleTouchEnd);
+            rightBtn.addEventListener('touchstart', handleTouchStart, { passive: false });
+            rightBtn.addEventListener('touchend', handleTouchEnd);
+            
+            resetGame();
+        }
+        
+        init();
+    });
+  </script>
+{% endblock %}

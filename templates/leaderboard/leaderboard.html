@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Leaderboard - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>🏆 Leaderboard</h1>
+    <p>See who's making the most impact in our campus community!</p>
+  </section>
+
+  <section class="leaderboard">
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Student Name</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        {# --- NEW: Loop through only the top profiles --- #}
+        {% for profile in top_profiles %}
+          <tr {% if profile.user == request.user %}class="current-user-row"{% endif %}>
+            <td>
+              {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% else %}{{ forloop.counter }}{% endif %}
+            </td>
+            <td>{{ profile.user.username }}</td>
+            <td>{{ profile.points }}</td>
+          </tr>
+        {% endfor %}
+
+        {# --- NEW: Special row for the current user --- #}
+        {% if current_user_rank > 4 %}
+          <tr class="separator-row"><td colspan="3">...</td></tr>
+          <tr class="current-user-row">
+            <td>{{ current_user_rank }}</td>
+            <td>{{ current_user_profile.user.username }} (You)</td>
+            <td>{{ current_user_profile.points }}</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </section>
+{% endblock %}

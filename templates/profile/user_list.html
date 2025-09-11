@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Find Friends{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Find Other Students</h1>
+    <p>Use the search bar below to find friends by their username.</p>
+    
+    <form method="GET" action="{% url 'user_list' %}" class="search-form">
+      <input type="text" name="q" placeholder="Search by username..." value="{{ query|default:'' }}" required>
+      <button type="submit">Search</button>
+    </form>
+  </section>
+  
+  {# This container will show either the search results or an initial message #}
+  <div class="user-list-container">
+    {% if users is not None %}
+      {# This part runs ONLY after a search has been performed #}
+      
+      {% for user in users %}
+        <a href="{% url 'view_user_profile' user.username %}" class="user-card">
+          <img src="{{ user.profile.image.url }}" alt="{{ user.username }}">
+          <h3>{{ user.username }}</h3>
+        </a>
+      {% empty %}
+        {# This message appears if the search found no results #}
+        <p style="color: #ccc; text-align: center; grid-column: 1 / -1;">No users found matching your search for "{{ query }}".</p>
+      {% endfor %}
+
+    {% else %}
+      {# This is the default message shown before any search is made #}
+      <p style="color: #ccc; text-align: center; grid-column: 1 / -1;">Please enter a username in the search bar to find other students.</p>
+    {% endif %}
+  </div>
+{% endblock %}

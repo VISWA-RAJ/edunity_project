@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Upload Material - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Upload Your Material</h1>
+    <p>Share your knowledge with the community.</p>
+  </section>
+
+  <div class="auth-form-container">
+    {# IMPORTANT: enctype is required for file uploads #}
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="auth-button">Upload</button>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dino Run - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>🦖 Dino Run</h1>
+    <p>Jump with Space/Up Arrow/Tap, Duck with Down Arrow/Button.</p>
+  </section>
+
+  <div class="game-area-wrapper">
+    <div class="game-leaderboard-container">
+      <h3>Top Dino Runners</h3>
+      <table class="leaderboard mini-leaderboard">
+        <tbody>
+          {% for score_entry in top_dino_scores %}
+            <tr><td>{% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% endif %}</td><td>{{ score_entry.user.username }}</td><td>{{ score_entry.score }}</td></tr>
+          {% empty %}
+            <tr><td colspan="3" style="text-align: center; color: #ccc;">No high scores yet!</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="gameArea" class="game-canvas-container">
+      <canvas id="gameCanvas" class="dino-game-canvas" width="600" height="200"></canvas>
+      <div id="fullscreenIcon">
+        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-4V5h-2v5h5V7h-3z"></path></svg>
+      </div>
+
+      {# --- CORRECTED MOBILE CONTROLS FOR DINO GAME --- #}
+      <div class="mobile-controls">
+        <button id="jumpBtn" class="d-pad-btn jump-btn">JUMP</button>
+        <button id="duckBtn" class="d-pad-btn duck-btn">DUCK</button>
+      </div>
+
+      <div id="startOverlay" class="game-over-overlay" style="display: flex;">
+        <div id="startContent"><h2>Ready to Run?</h2><button id="startButton" class="game-reset-button">Start Game</button></div>
+      </div>
+      <div id="gameOverOverlay" class="game-over-overlay">
+        <h2>Game Over</h2>
+        <p>Obstacles Cleared: <span id="finalScore">0</span></p>
+        <button id="playAgainButton" class="game-reset-button">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    #gameArea:fullscreen .dino-game-canvas {
+      width: auto; height: 90vh; max-width: 90vw; aspect-ratio: 600 / 200;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- GETTING ALL DOM ELEMENTS ---
+        const gameArea = document.getElementById('gameArea');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startOverlay = document.getElementById('startOverlay');
+        const startButton = document.getElementById('startButton');
+        const startContent = document.getElementById('startContent');
+        const gameOverOverlay = document.getElementById('gameOverOverlay');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const playAgainButton = document.getElementById('playAgainButton');
+        const fullscreenIcon = document.getElementById('fullscreenIcon');
+        const jumpBtn = document.getElementById('jumpBtn');
+        const duckBtn = document.getElementById('duckBtn');
+        
+        // --- GAME STATE AND CONSTANTS ---
+        let dino, obstacles, score, gameSpeed, isGameOver;
+        const groundHeight = canvas.height - 20;
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+        
+        function resetGame() {
+            isGameOver = false;
+            score = 0;
+            gameSpeed = 7;
+            obstacles = [];
+            dino = { x: 50, y: groundHeight, width: 30, height: 30, yVelocity: 0, isDucking: false };
+            gameOverOverlay.style.display = 'none';
+            draw();
+        }
+
+        // --- DRAWING FUNCTIONS ---
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw Player Box
+            ctx.fillStyle = '#00ffd0';
+            if (dino.isDucking) {
+                ctx.fillRect(dino.x, dino.y - 15, 35, 15);
+            } else {
+                ctx.fillRect(dino.x, dino.y - dino.height, dino.width, dino.height);
+            }
+            // Draw Obstacles
+            ctx.fillStyle = '#ff4b4b';
+            obstacles.forEach(obs => {
+                ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+            });
+            // Draw Score
+            ctx.fillStyle = 'white';
+            ctx.font = '20px Segoe UI, sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Score: ${score}`, 10, 25);
+        }
+
+        // --- REWRITTEN AND CORRECTED GAME LOOP ---
+        function gameLoop() {
+            if (isGameOver) return;
+
+            // 1. UPDATE PHYSICS & POSITIONS
+            dino.yVelocity += 0.8; 
+            dino.y += dino.yVelocity;
+            if (dino.y > groundHeight) {
+                dino.y = groundHeight;
+                dino.yVelocity = 0;
+            }
+            obstacles.forEach(obs => obs.x -= gameSpeed);
+
+            // 2. CHECK FOR COLLISIONS & SCORING
+            for (let i = 0; i < obstacles.length; i++) {
+                let obs = obstacles[i];
+                let dinoHitbox = dino.isDucking ? {x: dino.x, y: dino.y - 15, width: 35, height: 15} : {x: dino.x, y: dino.y - dino.height, width: dino.width, height: dino.height};
+                
+                if (dinoHitbox.x < obs.x + obs.width && dinoHitbox.x + dinoHitbox.width > obs.x &&
+                    dinoHitbox.y < obs.y + obs.height && dinoHitbox.y + dinoHitbox.height > obs.y) {
+                    gameOver();
+                    return;
+                }
+                
+                if (!obs.passed && dino.x > obs.x + obs.width) {
+                    score++;
+                    obs.passed = true;
+                }
+            }
+            
+            // 3. CLEAN UP off-screen obstacles
+            obstacles = obstacles.filter(obs => obs.x + obs.width > 0);
+
+            // 4. SPAWN new obstacles if needed
+            if (obstacles.length < 3 && (obstacles.length === 0 || obstacles[obstacles.length-1].x < canvas.width - 250 - Math.random() * 200)) {
+                spawnObstacle();
+            }
+
+            // 5. INCREASE difficulty and DRAW
+            gameSpeed += 0.004;
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function spawnObstacle() {
+            let newObstacle;
+            if (Math.random() > 0.4) {
+                const height = 20 + Math.random() * 25;
+                newObstacle = { x: canvas.width, y: groundHeight - height, width: 15, height: height, passed: false };
+            } else {
+                newObstacle = { x: canvas.width, y: groundHeight - 60, width: 40, height: 15, passed: false };
+            }
+            obstacles.push(newObstacle);
+        }
+        
+        function handleInput(e) {
+            e.preventDefault();
+            const inputType = e.type;
+            const key = e.code;
+            const targetId = e.target.id;
+
+            if (isGameOver) return;
+
+            if (key === 'Space' || key === 'ArrowUp' || targetId === 'jumpBtn' || (inputType === 'touchstart' && targetId !== 'duckBtn')) {
+                if (dino.y === groundHeight && !dino.isDucking) dino.yVelocity = -13;
+            } else if (key === 'ArrowDown' || targetId === 'duckBtn') {
+                if (inputType === 'keydown' || inputType === 'mousedown' || inputType === 'touchstart') {
+                    if (dino.y < groundHeight) dino.yVelocity = 15;
+                    else dino.isDucking = true;
+                } else if (inputType === 'keyup' || inputType === 'mouseup' || inputType === 'touchend') {
+                    dino.isDucking = false;
+                }
+            }
+        }
+        
+        async function submitScore() {
+            try {
+                const response = await fetch('/games/submit-score/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+                    body: JSON.stringify({ game: 'Dino Run', score: score })
+                });
+                await response.json();
+            } catch (error) {
+                console.error('Error submitting score:', error);
+            }
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            finalScoreDisplay.textContent = score;
+            gameOverOverlay.style.display = 'flex';
+            submitScore();
+        }
+
+        function startCountdown() {
+            let count = 3;
+            startContent.innerHTML = `<div class="countdown-text">${count}</div>`;
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) startContent.innerHTML = `<div class="countdown-text">${count}</div>`;
+                else if (count === 0) startContent.innerHTML = `<div class="countdown-text">Go!</div>`;
+                else {
+                    clearInterval(countdownInterval);
+                    startOverlay.style.display = 'none';
+                    gameLoop();
+                }
+            }, 1000);
+        }
+        
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                gameArea.requestFullscreen().catch(err => { alert(`Error: ${err.message}`); });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        function init() {
+            startButton.addEventListener('click', startCountdown);
+            playAgainButton.addEventListener('click', () => {
+                resetGame();
+                startCountdown();
+            });
+            document.addEventListener('keydown', handleInput);
+            document.addEventListener('keyup', handleInput);
+            fullscreenIcon.addEventListener('click', toggleFullScreen);
+            // Touch controls
+            jumpBtn.addEventListener('touchstart', handleInput, { passive: false });
+            duckBtn.addEventListener('touchstart', handleInput, { passive: false });
+            duckBtn.addEventListener('touchend', handleInput);
+            resetGame();
+        }
+        
+        init();
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}{{ item.item_name }} - Lost & Found{% endblock %}
+
+{% block content %}
+  <div class="item-detail-container">
+    <div class="item-detail-image-wrapper">
+      {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.item_name }}" class="item-detail-image">
+      {% else %}
+        <img src="https://placehold.co/600x400/000000/00ffd0?text=No+Image" alt="No image available" class="item-detail-image">
+      {% endif %}
+    </div>
+    <div class="item-detail-content">
+      <h1>{{ item.item_name }}</h1>
+      <p class="item-meta">
+        Reported by: <a href="{% url 'view_user_profile' item.reported_by.username %}">{{ item.reported_by.username }}</a> on {{ item.reported_at|date:"F d, Y" }}
+      </p>
+      
+      <h2>Description</h2>
+      <p>{{ item.description|linebreaksbr }}</p>
+
+      {% if item.last_known_location %}
+        <h2>Last Known Location</h2>
+        <p>{{ item.last_known_location }}</p>
+      {% endif %}
+      
+      {# --- DYNAMIC BUTTON LOGIC --- #}
+      <div class="item-actions">
+        {% if item.reported_by == request.user %}
+          {# If you are the owner, you see a delete button #}
+          <form action="{% url 'delete_lost_item' item.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="friend-btn remove-friend">Delete This Post</button>
+          </form>
+        {% else %}
+          {# If you are not the owner, you see the "I Found It" button #}
+          <h2>Think you found this?</h2>
+          <p>Click the button below to send a notification to the owner. Their contact info is: <strong>{{ item.contact_info }}</strong></p>
+          <form action="{% url 'found_item' item.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="found-btn">Notify Owner You Found It!</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

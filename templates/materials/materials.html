@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Study Materials - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Study Materials</h1>
+    <p>Share your notes and access helpful resources from peers.</p>
+    <div class="buttons" style="margin-top: 20px;">
+        <a href="{% url 'upload_material' %}" style="background-color: #00ffd0; color: #000; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: bold;">Upload Your Material</a>
+    </div>
+  </section>
+
+  <section class="shared-materials">
+    <h2>Recently Shared</h2>
+    <div class="material-grid">
+      {% for material in recent_materials %}
+        <div class="material-card">
+          <h3>📘 {{ material.title }}</h3>
+          <p>{{ material.description }}</p>
+          <p><small>Uploaded by: {{ material.uploader.username }}</small></p>
+          <a href="{{ material.uploaded_file.url }}" target="_blank" style="font-weight: bold;">View/Download</a>
+        </div>
+      {% empty %}
+        <p style="color: #ccc;">No materials have been shared yet. Be the first!</p>
+      {% endfor %}
+    </div>
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'material_list' %}" style="color: #00ffd0; font-size: 1.1rem; font-weight: bold;">View All Materials...</a>
+    </div>
+  </section>
+{% endblock %}

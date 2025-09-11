@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Post an Image Meme - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Post an Image</h1>
+    <p>Share a JPG, PNG, or GIF with the campus.</p>
+  </section>
+
+  <div class="auth-form-container">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="auth-button">Upload Image</button>
+    </form>
+  </div>
+{% endblock %}

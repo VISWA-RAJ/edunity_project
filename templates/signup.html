@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Create Your Account</h1>
+    <p>Join the Edunity community!</p>
+  </section>
+
+  <div class="auth-form-container">
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      
+      {% if form.non_field_errors %}
+        <div class="errorlist">
+          {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% for field in form %}
+        <div>
+          {{ field.label_tag }}
+
+          {% if 'password' in field.id_for_label %}
+            <div class="password-wrapper">
+              {{ field }}
+              <button type="button" class="toggle-password">Show</button>
+            </div>
+          {% else %}
+            {{ field }}
+          {% endif %}
+          
+          {% if field.help_text %}
+            <div class="helptext">{{ field.help_text|safe }}</div>
+          {% endif %}
+          
+          {# This is the most important part: It displays errors for each specific field #}
+          {% if field.errors %}
+            <div class="errorlist">
+              {% for error in field.errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="auth-button">Create Account</button>
+    </form>
+    <p class="switch-form-link">
+      Already have an account? <a href="{% url 'login' %}">Login here!</a>
+    </p>
+  </div>
+{% endblock %}

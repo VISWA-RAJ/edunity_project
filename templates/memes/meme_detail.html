@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}"{{ meme.caption }}" - Memes{% endblock %}
+
+{% block content %}
+<div class="meme-detail-container">
+  <div class="meme-content">
+    {% if meme.meme_type == 'IMAGE' %}
+      <img src="{{ meme.image.url }}" alt="{{ meme.caption }}">
+    {% elif meme.meme_type == 'VIDEO' %}
+      <div class="video-link-card detail-view">
+        <p class="video-caption">"{{ meme.caption }}"</p>
+        <a href="{{ meme.video_link }}" target="_blank" class="watch-button">
+            {% if 'instagram' in meme.video_link %}Watch on Instagram{% else %}Watch on YouTube{% endif %}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+  <div class="meme-sidebar">
+    <div class="author-info">
+      <img src="{{ meme.author.profile.image.url }}" alt="{{ meme.author.username }}">
+      <a href="{% url 'view_user_profile' meme.author.username %}">{{ meme.author.username }}</a>
+    </div>
+    <div class="comments-section">
+      <h4>Comments ({{ comments.count }})</h4>
+      <div class="comment-list">
+        {% for comment in comments %}
+          <div class="comment">
+            <p><strong>{{ comment.author.username }}:</strong> {{ comment.text }}</p>
+          </div>
+        {% empty %}
+          <p style="color: #aaa;">No comments yet.</p>
+        {% endfor %}
+      </div>
+      <form method="post" class="comment-form">
+        {% csrf_token %}
+        {{ comment_form.text }}
+        <button type="submit">Post</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

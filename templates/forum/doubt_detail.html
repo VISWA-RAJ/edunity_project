@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}{{ doubt.title }}{% endblock %}
+
+{% block content %}
+  <div class="doubt-detail">
+    <div class="doubt-card main-doubt">
+      <h1>{{ doubt.title }}</h1>
+      <p class="meta">Asked by: {{ doubt.author.username }} on {{ doubt.created_at|date:"F d, Y" }}</p>
+      <p class="description">{{ doubt.description|linebreaksbr }}</p>
+      
+      {% if doubt.image %}
+        <button id="viewImageBtn" class="view-image-btn">View Attached Image</button>
+      {% endif %}
+    </div>
+
+    <div class="replies-section">
+      <h2>Replies ({{ replies.count }})</h2>
+      {% for reply in replies %}
+        <div class="doubt-card reply-card">
+          <div class="vote-widget">
+            <form action="{% url 'vote_reply' reply.id %}" method="post"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><input type="hidden" name="vote_type" value="upvote"><button type="submit" class="vote-btn {% if user in reply.upvotes.all %}active{% endif %}">▲</button></form>
+            <span class="vote-count">{{ reply.total_votes }}</span>
+            <form action="{% url 'vote_reply' reply.id %}" method="post"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><input type="hidden" name="vote_type" value="downvote"><button type="submit" class="vote-btn {% if user in reply.downvotes.all %}active{% endif %}">▼</button></form>
+          </div>
+          <div class="reply-content">
+            <p>{{ reply.text|linebreaksbr }}</p>
+            <p class="meta">Replied by: {{ reply.author.username }} on {{ reply.created_at|date:"d M Y" }}</p>
+          </div>
+        </div>
+      {% empty %}
+        <p style="color: #ccc; text-align: center; padding: 20px;">Be the first to reply!</p>
+      {% endfor %}
+    </div>
+
+    <div class="reply-form-container">
+      <h3>Post Your Reply</h3>
+      {# --- THE FIX IS HERE: The variable name is now correct --- #}
+      <form method="post" class="form-container" style="margin-top: 10px; padding: 20px;">
+        {% csrf_token %}
+        {{ reply_form.as_p }}
+        <button type="submit" class="auth-button">Submit Reply</button>
+      </form>
+    </div>
+  </div>
+
+  {% if doubt.image %}
+  <div id="imageModal" class="image-modal">
+    <span id="closeModalBtn" class="close-modal-btn">&times;</span>
+    <img class="image-modal-content" src="{{ doubt.image.url }}">
+    <div id="imageCaption">{{ doubt.title }}</div>
+  </div>
+  {% endif %}
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('imageModal');
+      if (modal) {
+        const btn = document.getElementById('viewImageBtn');
+        const span = document.getElementById('closeModalBtn');
+        
+        btn.onclick = function() { modal.style.display = "block"; }
+        span.onclick = function() { modal.style.display = "none"; }
+        window.onclick = function(event) {
+          if (event.target == modal) { modal.style.display = "none"; }
+        }
+      }
+    });
+  </script>
+{% endblock %}

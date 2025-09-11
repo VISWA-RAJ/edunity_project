@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Welcome to Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Welcome to Edunity</h1>
+    <p>One Platform. Every Campus Need.</p>
+    <div class="buttons">
+      <a href="{% url 'signup' %}" style="background-color: #00ffd0; color: #000;">Get Started</a>
+      <a href="{% url 'login' %}">Login</a>
+    </div>
+  </section>
+
+  <section class="modules" id="modules">
+    <h2 style="color: #ffffff;">A Glimpse of Our Features</h2>
+    <p style="color: #cccccc; margin-bottom: 40px;">Create an account to access all features.</p>
+    <div class="card-grid">
+        <div class="card" style="opacity: 0.7;"><h3>📘 Study Materials</h3><p>Share and access study resources.</p></div>
+        <div class="card" style="opacity: 0.7;"><h3>🎒 Lost & Found</h3><p>Report and find lost items easily.</p></div>
+        <div class="card" style="opacity: 0.7;"><h3>💬 Forum</h3><p>Discuss doubts and topics with peers.</p></div>
+        <div class="card" style="opacity: 0.7;"><h3>📊 Polling</h3><p>Engage with live campus polls.</p></div>
+    </div>
+  </section>
+{% endblock %}

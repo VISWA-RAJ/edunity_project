@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile.user.username }}'s Profile{% endblock %}
+
+{% block content %}
+  <div class="profile-container">
+    <aside class="profile-sidebar">
+      <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-picture">
+      <div class="profile-info">
+        <h1 class="profile-username">{{ profile.user.username }}</h1>
+        <p class="profile-email">{{ profile.user.email }}</p>
+        <div class="profile-rank">{{ rank }}</div>
+        <div class="profile-points">{{ profile.points }} Points</div>
+        <div class="profile-main-rank">
+
+      </div>
+      <a href="{% url 'update_profile' %}" class="edit-profile-btn">Edit Your Profile</a>
+    </aside>
+
+    <main class="profile-main">
+  <div class="bio-section">
+    <h2>About Me</h2>
+    <p>{{ profile.bio|default:"No bio yet."|linebreaksbr }}</p>
+  </div>
+  
+  {# templates/profile/profile.html #}
+
+<div class="friend-requests-section">
+  <div class="notification-header">
+    <h2>Notifications</h2>
+    
+    {# --- THIS IS THE NEW "CLEAR ALL" BUTTON --- #}
+    {% if friend_requests or notifications %}
+      <form action="{% url 'clear_all_notifications' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="mark-all-read-btn">Clear All</button>
+      </form>
+    {% endif %}
+  </div>
+  
+  {# ... (the rest of the notification and friend request loops are here and correct) ... #}
+  {% for request in friend_requests %}
+    <div class="friend-request-card">
+      <a href="{% url 'view_user_profile' request.from_user.username %}" class="request-info">
+        <img src="{{ request.from_user.profile.image.url }}" alt="{{ request.from_user.username }}">
+        <span><strong>{{ request.from_user.username }}</strong> sent you a friend request.</span>
+      </a>
+      <div class="request-actions">
+        <form action="{% url 'accept_friend_request' request.id %}" method="post" style="display: inline;"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button type="submit" class="friend-btn add-friend">Accept</button></form>
+        <form action="{% url 'decline_friend_request' request.id %}" method="post" style="display: inline;"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button type="submit" class="friend-btn remove-friend">Decline</button></form>
+      </div>
+    </div>
+  {% endfor %}
+  {% for notification in notifications %}
+    <div class="notification-card">
+      <a href="{{ notification.link }}" class="request-info" style="text-decoration: none;">
+        {% if notification.sender %}
+          <img src="{{ notification.sender.profile.image.url }}" alt="{{ notification.sender.username }}">
+        {% endif %}
+        <span>{{ notification.message }}</span>
+      </a>
+      <div class="request-actions">
+        <form action="{% url 'dismiss_notification' notification.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="dismiss-btn">×</button>
+        </form>
+      </div>
+    </div>
+  {% endfor %}
+  {% if not friend_requests and not notifications %}
+    <p style="color: #ccc;">You have no new notifications.</p>
+  {% endif %}
+
+</div>
+
+  <div class="friends-section">
+    <h2>Friends ({{ friends.count }})</h2>
+    <div class="friends-list">
+      {% for friend_profile in friends %}
+        <a href="{% url 'view_user_profile' friend_profile.user.username %}" class="friend-card">
+          <img src="{{ friend_profile.image.url }}" alt="{{ friend_profile.user.username }}">
+          <span>{{ friend_profile.user.username }}</span>
+        </a>
+      {% empty %}
+        <p style="color: #ccc;">You haven't added any friends yet.</p>
+      {% endfor %}
+    </div>
+    <a href="{% url 'user_list' %}" class="find-friends-btn">Find Friends</a>
+  </div>
+</main>
+  </div>
+{% endblock %}

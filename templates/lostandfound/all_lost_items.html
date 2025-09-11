@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}All Lost Items - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>All Reported Lost Items</h1>
+    <p>Browse the full list of missing items on campus.</p>
+  </section>
+
+  {# --- ADD THIS ENTIRE NEW BLOCK --- #}
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <p class="message {{ message.tags }}">{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+
+  <section class="lost-items">
+    <div class="item-grid">
+      {# The loop variable from the view is now 'items' #}
+      {% for item in items %}
+        <a href="{% url 'item_detail' item.id %}" class="item-card-link">
+          <div class="item-card">
+            {% if item.image %}
+              <img src="{{ item.image.url }}" alt="{{ item.item_name }}">
+            {% else %}
+              <img src="https://placehold.co/200x150/000000/00ffd0?text=Item" alt="No image">
+            {% endif %}
+            <h3>{{ item.item_name }}</h3>
+            <p><small>Posted by: {{ item.reported_by.username }}</small></p>
+          </div>
+        </a>
+      {% empty %}
+        <p style="color: #ccc;">No lost items have been reported yet.</p>
+      {% endfor %}
+    </div>
+
+    {# --- PAGINATION SECTION --- #}
+    {% if items.has_other_pages %}
+      <div class="pagination">
+        {% if items.has_previous %}<a href="?page={{ items.previous_page_number }}" class="page-btn">&laquo; Previous</a>{% endif %}
+        {% for num in items.paginator.page_range %}
+          {% if items.number == num %}<span class="page-btn active">{{ num }}</span>
+          {% else %}<a href="?page={{ num }}" class="page-btn">{{ num }}</a>{% endif %}
+        {% endfor %}
+        {% if items.has_next %}<a href="?page={{ items.next_page_number }}" class="page-btn">Next &raquo;</a>{% endif %}
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

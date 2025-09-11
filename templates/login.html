@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Login - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Login to Your Account</h1>
+    <p>Welcome back!</p>
+  </section>
+
+  <div class="auth-form-container">
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      {% for field in form %}
+        <div>
+          {{ field.label_tag }}
+          
+          {# Check if the current field is the password field #}
+          {% if field.name == 'password' %}
+            <div class="password-wrapper">
+              {{ field }}
+              <button type="button" class="toggle-password">Show</button>
+            </div>
+          {% else %}
+            {{ field }}
+          {% endif %}
+
+          {% if field.help_text %}
+            <div class="helptext">{{ field.help_text|safe }}</div>
+          {% endif %}
+          {{ field.errors }}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="auth-button">Login</button>
+    </form>
+    <p class="switch-form-link">
+      Don't have an account? <a href="{% url 'signup' %}">Sign up here!</a>
+    </p>
+  </div>
+{% endblock %}

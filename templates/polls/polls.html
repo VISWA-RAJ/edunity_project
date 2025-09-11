@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Polls - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Live Polls</h1>
+    <p>Engage with real-time campus opinions and votes.</p>
+  </section>
+
+  {# This section now links to our dedicated "Create Poll" page #}
+  <section class="create-poll">
+    <h2>Create a New Poll</h2>
+    <p style="text-align: center; color: #ccc; margin-bottom: 20px;">Have a burning question for the campus? Start here!</p>
+    {# This link uses the button style for a consistent look #}
+    <a href="{% url 'create_poll' %}" class="auth-button" style="text-decoration: none; display: block; text-align: center; max-width: 300px; margin: auto;">Create a Poll</a>
+  </section>
+
+  {# Display any messages from the server (e.g., "Vote recorded!") #}
+  {% if messages %}
+    <div class="messages-container" style="max-width: 800px; margin: 20px auto;">
+      {% for message in messages %}
+        <p style="padding: 15px; border-radius: 8px; color: #fff; background-color: {% if message.tags == 'success' %}#008070{% else %}#c0392b{% endif %};">{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <section class="active-polls">
+    <h2>Active Polls</h2>
+
+    {% for poll in polls %}
+      <div class="poll-card">
+        <h3>🎓 {{ poll.question }}</h3>
+        <p style="font-size: 0.8rem; color: #aaa; margin-bottom: 15px;">Created by: {{ poll.created_by.username }}</p>
+
+        {% if user in poll.voters.all %}
+          {# --- USER HAS VOTED: SHOW RESULTS --- #}
+          <div class="poll-results">
+            {% for choice in poll.choice_set.all %}
+              <div class="result-bar">
+                <span class="choice-text">{{ choice.text }} ({{ choice.votes }} votes)</span>
+              </div>
+            {% endfor %}
+            <p style="font-size: 0.9rem; margin-top: 10px; color: #00ffd0;">You have already voted.</p>
+          </div>
+        {% else %}
+          {# --- USER HAS NOT VOTED: SHOW CORRECTED VOTING FORM --- #}
+          <form action="{% url 'vote' poll.id %}" method="post">
+            {% csrf_token %}
+            <div class="poll-options">
+              {% for choice in poll.choice_set.all %}
+                <div class="poll-option">
+                  <input type="radio" id="choice{{ choice.id }}" name="choice" value="{{ choice.id }}" required>
+                  <label for="choice{{ choice.id }}">{{ choice.text }}</label>
+                </div>
+              {% endfor %}
+            </div>
+            <button type="submit" class="auth-button" style="margin-top: 15px;">Submit Vote</button>
+          </form>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p style="color: #ccc;">No polls are active right now. Why not create one?</p>
+    {% endfor %}
+  </section>
+{% endblock %}

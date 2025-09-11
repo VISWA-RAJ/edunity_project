@@ -1,0 +1,3450 @@
+/* Reset and font setup */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  color: #f0f0f0;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* --- Sticky Footer Wrapper --- */
+.content-wrapper {
+  flex-grow: 1; /* This is the magic line that pushes the footer down */
+}
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  position: relative; 
+  z-index: 100; 
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  margin: 0 12px;
+  text-decoration: none;
+  color: #cccccc;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 100px 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 3rem;
+  color: #ffffff;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin: 10px 0 30px;
+  color: #dddddd;
+}
+
+.hero .buttons a {
+  display: inline-block;
+  margin: 10px;
+  padding: 12px 24px;
+  background-color: #00bfa5;
+  color: #000;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.hero .buttons a:hover {
+  background-color: #009688;
+}
+
+/* Modules Section */
+.modules {
+  padding: 60px 40px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  text-align: center;
+}
+
+.modules h2 {
+  font-size: 2rem;
+  color: #00ffd0;
+  margin-bottom: 40px;
+}
+
+/* Cards Layout */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s;
+  color: #ffffff;
+
+  /* FIX: remove underline and make the entire card clickable */
+  text-decoration: none;
+  display: block;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #00ffd0;
+}
+
+.card h3 {
+  color: #00ffd0;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+.card p {
+  color: #dddddd;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+
+/* --- Authentication Form Styles --- */
+
+.auth-form-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 40px;
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-form-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ccc;
+  font-weight: bold;
+}
+
+.auth-form-container input[type="text"],
+.auth-form-container input[type="password"],
+.auth-form-container input[type="email"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  box-sizing: border-box; /* Ensures padding doesn't affect width */
+  margin-bottom: 1rem;
+}
+
+.auth-form-container input:focus {
+    outline: none;
+    border-color: #00ffd0;
+}
+
+.auth-form-container .helptext {
+  font-size: 0.8rem;
+  color: #aaa;
+  display: block;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.auth-form-container .errorlist {
+  list-style: none;
+  padding: 0;
+  margin: -10px 0 10px 0;
+  color: #ff4b4b;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.auth-form-container .auth-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 20px;
+}
+
+.auth-form-container .auth-button:hover {
+    background-color: #00c0a0;
+}
+
+.auth-form-container .switch-form-link {
+    text-align: center;
+    color: #ccc;
+}
+
+.auth-form-container .switch-form-link a {
+    color: #00ffd0;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* --- Show Password Button Styles --- */
+
+/* This container allows us to position the button inside the input field */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Make the input field take all available space */
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+  width: 100%;
+}
+
+/* The actual "Show/Hide" button */
+.toggle-password {
+  position: absolute;
+  right: 12px; /* Position it on the right side */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #ccc;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px;
+  z-index: 2; /* Ensure it's above the input field */
+  font-size: 0.8rem;
+}
+
+.toggle-password:hover {
+  color: #00ffd0;
+}
+
+/* materials */
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: #f0f0f0;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #cccccc;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Upload Section */
+.upload-section {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.55);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+}
+
+.upload-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00ffd0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+label {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+input[type="text"],
+textarea,
+input[type="file"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 1rem;
+}
+
+textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #aaaaaa;
+  opacity: 1;
+}
+
+button[type="submit"] {
+  padding: 14px;
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #00c0a0;
+}
+
+/* Shared Materials Section */
+.shared-materials {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.shared-materials h2 {
+  margin-bottom: 20px;
+  color: #00ffd0;
+}
+
+.material-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.material-card {
+  background-color: rgba(0,0,0, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  transition: transform 0.3s;
+}
+
+.material-card:hover {
+  transform: scale(1.02);
+  background-color: rgba(0, 255, 208, 0.08);
+}
+
+.material-card h3 {
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.material-card p {
+  color: #cccccc;
+  margin-bottom: 12px;
+}
+
+.material-card a {
+  color: #00ffd0;
+  text-decoration: underline;
+}
+
+
+/*forum */
+
+
+* {
+
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: #f0f0f0;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #cccccc;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Ask Doubt */
+.ask-doubt {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.55);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+}
+
+.ask-doubt h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00ffd0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+label {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+input[type="text"],
+input[type="url"],
+textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 1rem;
+}
+
+textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #aaaaaa;
+  opacity: 1;
+}
+
+button[type="submit"] {
+  padding: 14px;
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #00c0a0;
+}
+
+/* Doubt Feed */
+.doubt-feed {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.doubt-feed h2 {
+  margin-bottom: 20px;
+  color: #00ffd0;
+}
+
+.doubt-card {
+  background-color: rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(4px);
+  transition: transform 0.3s;
+}
+
+.doubt-card:hover {
+  transform: scale(1.02);
+  background-color: rgba(0, 255, 208, 0.08);
+}
+
+.doubt-card h3 {
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.doubt-card p {
+  color: #cccccc;
+  margin-bottom: 12px;
+}
+
+.doubt-card a {
+  color: #00ffd0;
+  text-decoration: underline;
+}
+
+/* --- Doubt Detail and Reply Styles --- */
+.doubt-detail {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.main-doubt {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  border-left: 5px solid #00ffd0;
+}
+.main-doubt h1 {
+  color: #fff;
+}
+.main-doubt .meta {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin: 5px 0 20px 0;
+}
+.main-doubt .description {
+  color: #ddd;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+.main-doubt .video-link {
+  display: inline-block;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+.replies-section {
+  margin-top: 40px;
+}
+.replies-section h2 {
+  color: #00ffd0;
+  margin-bottom: 20px;
+}
+.reply-card {
+  border-left: 3px solid #ccc;
+}
+.reply-card .meta {
+  font-size: 0.8rem;
+  text-align: right;
+  color: #aaa;
+}
+.reply-form-container {
+  margin-top: 40px;
+}
+.reply-form-container h3 {
+  color: #00ffd0;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* lost and found*/
+/* Import base theme */
+
+
+* {
+
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: #f0f0f0;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #cccccc;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Form Section */
+.report-form {
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.report-form h2 {
+  color: #00ffd0;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+input[type="text"],
+textarea,
+input[type="file"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+textarea {
+  resize: vertical;
+  height: 80px;
+}
+
+button[type="submit"] {
+  padding: 12px;
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #00c0a0;
+}
+
+/* Item Cards */
+.lost-items {
+  padding: 60px 40px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(5px);
+}
+
+.lost-items h2 {
+  font-size: 1.8rem;
+  color: #00ffd0;
+  margin-bottom: 30px;
+}
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.item-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  color: #fff;
+  /* THE FIX: Use flexbox to stack content vertically */
+  display: flex;
+  flex-direction: column;
+}
+
+.item-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain; /* THE FIX: This makes the whole image visible */
+  border-radius: 8px;
+  margin-bottom: 12px;
+  /* Optional: Add a subtle background in case images have transparency or don't fill the space */
+  background-color: rgba(0, 0, 0, 0.2); 
+}
+
+.item-card h3 {
+  color: #00ffd0;
+}
+
+.found-btn {
+  /* THE FIX: This magic line pushes the button to the bottom of the card */
+  margin-top: auto; 
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  padding: 10px 16px; /* Slightly more padding */
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+  text-decoration: none; /* Ensure link versions have no underline */
+  display: inline-block; /* Ensures proper spacing and behavior */
+}
+
+.found-btn:hover {
+  background-color: #00bfa5;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #aaaaaa;
+  opacity: 1;
+}
+
+/* report lost css*/
+
+
+* {
+
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: #f0f0f0;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #cccccc;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Form Section */
+.report-form {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.55);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+label {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+input[type="text"],
+textarea,
+input[type="file"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 1rem;
+}
+
+textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+/* Placeholder styling */
+input::placeholder,
+textarea::placeholder {
+  color: #aaaaaa;
+  opacity: 1;
+}
+
+/* Submit Button */
+button[type="submit"] {
+  padding: 14px;
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #00c0a0;
+}
+
+/*polls*/
+
+
+* {
+ 
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #f0f0f0;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #cccccc;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Create Poll */
+.create-poll {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.55);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+}
+
+.create-poll h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00ffd0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+label {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+input[type="text"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 1rem;
+}
+
+input::placeholder {
+  color: #aaaaaa;
+}
+
+button[type="submit"] {
+  padding: 14px;
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #00c0a0;
+}
+
+/* Active Polls */
+.active-polls {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.active-polls h2 {
+  color: #00ffd0;
+  margin-bottom: 20px;
+}
+
+.poll-card {
+  background-color: rgba(0,0,0, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.poll-card h3 {
+  color: #ffffff;
+  margin-bottom: 14px;
+}
+
+.options button {
+  margin-right: 10px;
+  margin-bottom: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #00ffd0;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.options button:hover {
+  background-color: #00c0a0;
+}
+/* --- Poll Results Styles --- */
+.poll-results {
+  width: 100%;
+}
+.result-bar {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* --- Custom Poll Radio Button Styles --- */
+.poll-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.poll-option {
+  width: 100%;
+}
+.poll-option input[type="radio"] {
+  display: none; /* Hide the default radio button */
+}
+.poll-option label {
+  display: block;
+  padding: 12px;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #ccc;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+.poll-option label:hover {
+  background-color: rgba(0, 255, 208, 0.2);
+  border-color: #00ffd0;
+}
+.poll-option input[type="radio"]:checked + label {
+  background-color: #00ffd0;
+  color: #000;
+  font-weight: bold;
+  border-color: #00ffd0;
+}
+
+/* --- Fix for Visited Link Button Color --- */
+
+/* Targets any <a> tag that also has the class .auth-button */
+a.auth-button,
+a.auth-button:visited {
+  color: #000; /* Force the text color to be black */
+  text-decoration: none; /* Ensure there is no underline */
+}
+
+/*notices*/
+
+
+* {
+
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #f0f0f0;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #cccccc;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Notices Section */
+.notices-list {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.notice-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-left: 5px solid #00ffd0;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  transition: transform 0.3s ease;
+}
+
+.notice-card:hover {
+  transform: scale(1.02);
+}
+
+.notice-card h3 {
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.notice-card p {
+  color: #cccccc;
+  margin-bottom: 8px;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #00ffd0;
+  color: #000;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+/* Color codes for different types */
+.notice-card.urgent {
+  border-left-color: #ff4b4b;
+}
+
+.notice-card.event {
+  border-left-color: #ffd700;
+}
+
+.notice-card.exam {
+  border-left-color: #1e90ff;
+}
+
+.notice-card.general {
+  border-left-color: #00ffd0;
+}
+
+.add-notice {
+  max-width: 700px;
+  margin: 40px auto;
+  background-color: rgba(0,0,0, 0.05);
+  padding: 25px;
+  border-radius: 14px;
+  backdrop-filter: blur(5px);
+}
+
+.add-notice h2 {
+  text-align: center;
+  color: #00ffd0;
+  margin-bottom: 20px;
+}
+
+.add-notice form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.add-notice input,
+.add-notice textarea,
+.add-notice select {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.add-notice input::placeholder,
+.add-notice textarea::placeholder {
+  color: #aaa;
+}
+
+.add-notice select {
+  color: #fff;
+}
+
+.add-notice button {
+  background-color: #00ffd0;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-notice button:hover {
+  background-color: #00c0a0;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #cccccc; /* change this to any color you want */
+  opacity: 1; /* for full visibility */
+}
+
+/* --- Custom Notice Form Redesign --- */
+
+.notice-form-container {
+  max-width: 600px; /* A bit wider for better spacing */
+  margin: 40px auto;
+  padding: 40px;
+  /* THE FIX: Darker background with higher opacity */
+  background: rgba(0, 0, 0, 0.8); 
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* This targets the individual form rows (label + input) */
+.notice-form-container .form-field {
+  margin-bottom: 1.5rem; /* Space between form fields */
+}
+
+/* THE FIX: Proper label styling and alignment */
+.notice-form-container label {
+  display: block;
+  margin-bottom: 8px;
+  color: #ccc;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-align: left; /* Ensures labels are left-aligned */
+}
+
+/* Styling for text inputs and textareas */
+.notice-form-container input[type="text"],
+.notice-form-container textarea,
+.notice-form-container select {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  box-sizing: border-box;
+}
+
+.notice-form-container textarea {
+  min-height: 120px; /* Give the content box more height */
+  resize: vertical;
+}
+
+/* Focus effect for a premium feel */
+.notice-form-container input:focus,
+.notice-form-container textarea:focus,
+.notice-form-container select:focus {
+    outline: none;
+    border-color: #00ffd0;
+    box-shadow: 0 0 10px rgba(0, 255, 208, 0.3);
+}
+
+/* Styling for the dropdown menu */
+.notice-form-container select {
+  appearance: none; /* Remove default system arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23cccccc' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+}
+
+/* We can reuse the auth button style, but give it some top margin */
+.notice-form-container .auth-button {
+  margin-top: 10px;
+}
+
+/* --- Notice Meta Info Style --- */
+
+.notice-card .notice-meta {
+  font-size: 0.8rem; /* Make the text smaller */
+  color: #aaa;      /* Use a subtle, faded color */
+  margin-top: 15px;  /* Add some space above it */
+  padding-top: 10px; /* Add more space */
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* Add a faint separator line */
+  text-align: right; /* Align it to the right for a clean look */
+}
+
+/* --- Notice Card Readability Fix --- */
+
+/* This makes the notice card background darker and less transparent */
+.notice-card {
+  background-color: rgba(10, 20, 30, 0.7); /* Dark, semi-transparent blue-grey */
+  backdrop-filter: blur(8px);
+}
+
+/* This makes the main text in the card brighter and more readable */
+.notice-card p {
+  color: #e0e0e0; /* A soft white for better contrast */
+}
+
+
+/* --- Dropdown Menu Color Fix --- */
+
+/* This styles the main dropdown box itself */
+.notice-form-container select {
+  color: #ffffff; /* Ensures the selected option text is white */
+}
+
+/* This styles the individual options when the dropdown is open */
+.notice-form-container select option {
+  background-color: #2c3e50; /* A dark, solid background color */
+  color: #ffffff;           /* White text for the options */
+}
+
+/*memes*/
+
+
+* {
+
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #f0f0f0;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: #cccccc;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Upload Section */
+.upload-section {
+  max-width: 700px;
+  margin: 40px auto;
+  background-color: rgba(0,0,0, 0.03);
+  padding: 25px;
+  border-radius: 14px;
+  backdrop-filter: blur(5px);
+}
+
+.upload-section h2 {
+  text-align: center;
+  color: #00ffd0;
+  margin-bottom: 20px;
+}
+
+.upload-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.upload-section input,
+.upload-section select {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.upload-section input::placeholder {
+  color: #aaa;
+}
+
+.upload-section button {
+  background-color: #00ffd0;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-section button:hover {
+  background-color: #00c0a0;
+}
+
+/* --- 5. MODULE-SPECIFIC STYLES --- */
+/* ... (materials, forum, notice card styles are here) ... */
+
+/* --- MEMES MODULE (REDESIGNED) --- */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  padding: 40px;
+  max-width: 1400px;
+  margin: auto;
+}
+.gallery-card {
+  background-color: rgba(10, 20, 30, 0.75);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 255, 208, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+.gallery-link { display: block; }
+.gallery-card img { width: 100%; display: block; }
+
+.video-link-card {
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+.video-caption {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.watch-button {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #00ffd0;
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 25px;
+  transition: transform 0.2s;
+}
+.watch-button:hover {
+  transform: scale(1.05);
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  margin-top: auto; /* Pushes footer to the bottom */
+  border-top: 1px solid rgba(0, 255, 208, 0.1);
+}
+.author-info-small { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.author-info-small img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+.author-info-small span { color: #ccc; font-weight: 500; }
+.card-actions { display: flex; align-items: center; gap: 15px; }
+
+.comment-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.comment-btn:hover { color: #fff; }
+
+.like-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid #555; color: #fff; padding: 6px 12px; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+.like-btn.liked { background-color: #e91e63; border-color: #e91e63; }
+.like-btn:hover { border-color: #e91e63; }
+
+/* Detail Page */
+.meme-detail-container { display: flex; flex-wrap: wrap; max-width: 1200px; margin: 40px auto; min-height: 80vh; background: #111; border-radius: 16px; overflow: hidden; }
+.meme-content { flex: 2; min-width: 300px; background-color: #000; display: flex; align-items: center; justify-content: center; }
+.meme-content img { max-width: 100%; max-height: 80vh; object-fit: contain; }
+.meme-content .video-link-card.detail-view { height: 100%; }
+.meme-sidebar { flex: 1; min-width: 350px; padding: 20px; display: flex; flex-direction: column; }
+/* ... (The rest of your detail page and comment CSS is correct) ... */
+
+/*games*/
+
+
+* {
+
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: #f0f0f0;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #ccc;
+  margin-left: 16px;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Game Grid */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.game-card {
+  background-color: rgba(0,0,0, 0.08);
+  padding: 20px;
+  border-radius: 14px;
+  text-align: center;
+  backdrop-filter: blur(5px);
+}
+
+.game-card h3 {
+  color: #00ffd0;
+  margin-bottom: 10px;
+}
+
+.game-card p {
+  color: #ccc;
+  margin-bottom: 16px;
+}
+
+.game-card a {
+  text-decoration: none;
+  background-color: #00ffd0;
+  color: #000;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.game-card a:hover {
+  background-color: #00c0a0;
+}
+
+/* --- Tic Tac Toe Game Styles --- */
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 5px;
+  background-color: #00ffd0; /* Teal lines */
+  border: 5px solid #00ffd0;
+  border-radius: 10px;
+}
+
+.game-cell {
+  width: 100px;
+  height: 100px;
+  background-color: #1a2a3a; /* Dark background for cells */
+  color: #fff;
+  font-size: 3rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.game-cell:hover {
+  background-color: #2c3e50;
+}
+
+.game-status {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+.game-reset-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.game-reset-button:hover {
+  background-color: #00bfa5;
+}
+
+/*leaderboard*/
+
+
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url("/static/images/backgroundMAIN.JPG");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  color: #f0f0f0;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #00ffd0;
+}
+
+nav a {
+  text-decoration: none;
+  color: #ccc;
+  margin-left: 16px;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #00ffd0;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+/* Leaderboard Table */
+.leaderboard {
+  padding: 40px;
+  max-width: 900px;
+  margin: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 16px;
+  text-align: left;
+}
+
+th {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #00ffd0;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+td {
+  color: #f0f0f0;
+}
+
+/* --- Redesigned Profile Page Styles --- */
+.profile-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+  display: flex;
+  gap: 30px;
+  color: #fff;
+}
+
+.profile-sidebar {
+  flex: 0 0 300px; /* Sidebar width, doesn't grow or shrink */
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #00ffd0;
+  margin-bottom: 20px;
+}
+
+.profile-username {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.profile-email {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.profile-rank {
+  background-color: #00ffd0;
+  color: #000;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.profile-points {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.profile-main {
+  flex-grow: 1; /* Main content takes remaining space */
+}
+
+.bio-section, .update-form {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bio-section h2, .update-form h2 {
+  color: #00ffd0;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 10px;
+}
+
+.bio-section p {
+  line-height: 1.6;
+  color: #ddd;
+}
+
+.update-form .form-field {
+  margin-bottom: 1rem;
+}
+
+.profile-success-message {
+  padding: 10px;
+  background-color: rgba(0, 255, 208, 0.2);
+  color: #00ffd0;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+
+/* --- New Profile & Friends System Styles --- */
+.edit-profile-btn {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid #00ffd0;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+.edit-profile-btn:hover {
+  background-color: #00ffd0;
+  color: #000;
+}
+.friends-section {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.friends-section h2 {
+  color: #00ffd0;
+  margin-bottom: 20px;
+}
+.friends-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.friend-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+.friend-card:hover {
+  background-color: rgba(0, 255, 208, 0.2);
+}
+.friend-card img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.friend-card span {
+  color: #fff;
+  font-weight: bold;
+}
+.find-friends-btn {
+  display: inline-block;
+  margin-top: 20px;
+  color: #00ffd0;
+  font-weight: bold;
+}
+.user-list-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+.user-card {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 0.3s;
+}
+.user-card:hover {
+  transform: translateY(-5px);
+  border: 1px solid #00ffd0;
+}
+.user-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+.user-card h3 { color: #fff; }
+.user-card p { color: #aaa; font-size: 0.9rem; }
+
+.friend-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s;
+}
+.add-friend {
+  background-color: #00ffd0;
+  color: #000;
+}
+.add-friend:hover {
+  background-color: #00bfa5;
+}
+.remove-friend {
+  background-color: #444;
+  color: #ccc;
+  border: 1px solid #666;
+}
+.remove-friend:hover {
+  background-color: #c0392b;
+  color: #fff;
+  border-color: #c0392b;
+}
+
+/*   */
+/* --- New Friend Request and Search Styles --- */
+.friend-requests-section {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 30px;
+}
+.friend-requests-section h2 {
+  color: #00ffd0;
+  margin-bottom: 20px;
+}
+.friend-request-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.request-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+  color: #fff;
+}
+.request-info img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.request-actions {
+  display: flex;
+  gap: 10px;
+}
+.request-actions .friend-btn {
+  margin-top: 0;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+}
+.search-form {
+  margin-top: 20px;
+  display: flex;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.search-form input {
+  flex-grow: 1;
+  padding: 12px;
+  border-radius: 8px 0 0 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 1rem;
+}
+.search-form input:focus {
+  outline: none;
+  border-color: #00ffd0;
+}
+.search-form button {
+  padding: 0 20px;
+  border: none;
+  background-color: #00ffd0;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 0 8px 8px 0;
+}
+
+/* --- Notification Badge Style --- */
+.profile-nav-link {
+  position: relative;
+  display: inline-block;
+}
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: #ff4b4b; /* A bright red */
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #1a2a3a; /* Match the header background */
+}
+
+/* --- Snake Game Styles --- */
+.game-canvas-container {
+  position: relative; /* Needed for the game over overlay */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+#gameCanvas {
+  background-color: #1a2a3a;
+  border: 4px solid #00ffd0;
+  border-radius: 8px;
+}
+
+.game-score-display {
+  font-size: 2rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+.game-over-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: none; /* Initially hidden */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  backdrop-filter: blur(5px);
+}
+
+.game-over-overlay h2 {
+  font-size: 3rem;
+  color: #ff4b4b;
+}
+
+.game-over-overlay p {
+  font-size: 1.5rem;
+  margin: 10px 0 20px 0;
+}
+
+.game-over-overlay a {
+  padding: 12px 24px;
+  background-color: #00ffd0;
+  color: #000;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+.game-over-overlay a:hover {
+  background-color: #00bfa5;
+}
+
+
+
+/* --- Game Fullscreen Styles --- */
+
+/* This targets our main game container when it's in fullscreen */
+#gameArea:fullscreen {
+  background-color: #1a2a3a; /* Match the dark game background */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* This makes the canvas scale up to fill the screen while keeping its square shape */
+#gameArea:fullscreen #gameCanvas {
+  width: 90vmin;  /* 90% of the smaller screen dimension (width or height) */
+  height: 90vmin;
+}
+
+/* Make the score text bigger in fullscreen */
+#gameArea:fullscreen .game-score-display {
+  font-size: 3rem;
+}
+
+/* Make the fullscreen button smaller and position it better when in fullscreen */
+#gameArea:fullscreen #fullscreenButton {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 0.8rem;
+    padding: 8px 16px;
+}
+
+/* --- New Game Page Layout Styles --- */
+
+.game-area-wrapper {
+  max-width: 900px;
+  margin: 40px auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Aligns items to the top */
+  gap: 30px;
+  padding: 0 20px;
+}
+
+.game-leaderboard-container {
+  flex: 0 0 300px; /* Leaderboard width, doesn't grow or shrink */
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-leaderboard-container h3 {
+  color: #00ffd0;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* This makes the game-specific leaderboard table look good */
+.game-leaderboard-container .leaderboard.mini-leaderboard table {
+  width: 100%;
+  font-size: 0.9rem;
+}
+.game-leaderboard-container .leaderboard.mini-leaderboard th,
+.game-leaderboard-container .leaderboard.mini-leaderboard td {
+  padding: 8px;
+}
+
+/* --- Start Game Overlay Styles --- */
+#startOverlay {
+  z-index: 10; /* Ensure it's above the canvas */
+}
+#startOverlay div {
+  text-align: center;
+}
+#startOverlay h2 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+/* --- New Fullscreen Icon & Countdown Styles --- */
+
+/* This positions the new icon at the bottom right of the game area */
+#fullscreenIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 15; /* Ensure it's above the canvas but below overlays */
+}
+
+#fullscreenIcon svg {
+  width: 100%;
+  height: 100%;
+  fill: #aaa;
+  transition: fill 0.2s, transform 0.2s;
+}
+
+#fullscreenIcon:hover svg {
+  fill: #fff;
+  transform: scale(1.1);
+}
+
+/* Style for the countdown text inside the start overlay */
+.countdown-text {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #00ffd0;
+  text-shadow: 0 0 15px rgba(0, 255, 208, 0.5);
+  animation: countdown-pulse 1s infinite;
+}
+
+/* A simple animation for the countdown numbers */
+@keyframes countdown-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Hide the old fullscreen text button */
+#fullscreenButton {
+    display: none;
+}
+
+/* --- Flappy Bird Game Styles --- */
+
+.flappy-bird-canvas {
+  background-image: url('https://placehold.co/320x480/87CEEB/FFFFFF?text=Sky'); /* Simple sky background */
+  background-size: cover;
+  border: 4px solid #00ffd0;
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- Polished Game Feature Styles (used by Snake & Flappy Bird) --- */
+
+/* This positions the new icon at the bottom right of the game area */
+#fullscreenIcon {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 15; /* Ensure it's above the canvas but below overlays */
+}
+#fullscreenIcon svg {
+  width: 100%;
+  height: 100%;
+  fill: #aaa;
+  transition: fill 0.2s, transform 0.2s;
+}
+#fullscreenIcon:hover svg {
+  fill: #fff;
+  transform: scale(1.1);
+}
+
+/* Style for the countdown text inside the start overlay */
+.countdown-text {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #00ffd0;
+  text-shadow: 0 0 15px rgba(0, 255, 208, 0.5);
+  animation: countdown-pulse 1s infinite;
+}
+@keyframes countdown-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Styles for the game canvas in fullscreen mode */
+#gameArea:fullscreen {
+  background-color: #1a2a3a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+#gameArea:fullscreen .flappy-bird-canvas {
+  width: auto;
+  height: 90vh; /* Make the canvas as tall as possible while maintaining aspect ratio */
+  max-width: 90vw;
+}
+
+/* --- Redesigned Dino Game Style --- */
+
+/* --- Final, Redesigned Dino Game Style --- */
+
+.dino-game-canvas {
+  /* This creates the two-tone desert look */
+  background: linear-gradient(to bottom, #1a2a3a 85%, #d2b48c 85%);
+  border: 4px solid #00ffd0;
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make the game area fill the screen better in fullscreen */
+#gameArea:fullscreen .dino-game-canvas {
+  width: 90vw;
+  height: auto;
+  max-height: 90vh;
+}
+
+/* --- Campus Invaders Game Styles --- */
+
+.invaders-canvas {
+  background-color: #1a2a3a; /* Dark space background */
+  border: 4px solid #00ffd0;
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make the game area fill the screen better in fullscreen */
+#gameArea:fullscreen .invaders-canvas {
+  width: auto;
+  height: 90vh;
+  max-height: 90vh;
+  aspect-ratio: 600 / 600; /* Force it to be square */
+}
+
+/* --- New Notification Styles --- */
+.notification-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 4px solid transparent;
+}
+.notification-card.unread {
+  border-left-color: #00ffd0;
+  background-color: rgba(0, 255, 208, 0.1);
+}
+.view-btn {
+  background-color: #444;
+  color: #ccc;
+  border: 1px solid #666;
+  text-decoration: none;
+}
+.view-btn:hover {
+  background-color: #555;
+}
+
+
+/* --- Lost & Found Detail Page Styles --- */
+.item-detail-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+  display: flex;
+  gap: 30px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.item-detail-image-wrapper {
+  flex: 0 0 50%; /* Image takes up half the space */
+}
+.item-detail-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: contain;
+}
+.item-detail-content {
+  flex: 1;
+}
+.item-detail-content h1 {
+  font-size: 2.5rem;
+  color: #00ffd0;
+}
+.item-detail-content h2 {
+  font-size: 1.5rem;
+  color: #00ffd0;
+  margin-top: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+}
+.item-detail-content p {
+  line-height: 1.6;
+  color: #ddd;
+}
+.item-meta {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 20px;
+}
+.item-meta a {
+  color: #ccc;
+  font-weight: bold;
+  text-decoration: none;
+}
+.item-meta a:hover { text-decoration: underline; }
+.item-actions {
+  margin-top: 30px;
+}
+.item-actions .found-btn, .item-actions .friend-btn {
+  width: 100%;
+  text-align: center;
+}
+
+/* Make item cards clickable links */
+.item-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.item-card-link .item-card {
+  height: 100%;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.item-card-link:hover .item-card {
+  transform: translateY(-5px);
+  border-color: #00ffd0;
+}
+
+/* --- Corrected Lost & Found Card Styles --- */
+.item-card {
+  display: flex;
+  flex-direction: column; /* This is the key to the new layout */
+  height: 100%; /* Ensure cards in a row are the same height */
+}
+
+.item-title-link {
+  text-decoration: none;
+  color: #00ffd0;
+}
+.item-title-link:hover {
+  text-decoration: underline;
+}
+
+.item-author {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+.item-card-actions {
+  margin-top: auto; /* This magic line pushes the button to the bottom */
+}
+
+.item-card-actions .found-btn,
+.item-card-actions .friend-btn {
+  width: 100%;
+}
+
+/* --- New Mark All Read Button Style --- */
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mark-all-read-btn {
+  background: none;
+  border: 1px solid #444;
+  color: #aaa;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mark-all-read-btn:hover {
+  background-color: #00ffd0;
+  color: #000;
+  border-color: #00ffd0;
+}
+
+/* --- UNIVERSAL UI REDESIGN FOR VISIBILITY & IMPACT --- */
+
+/* --- 1. Card Redesign (Materials & Forum) --- */
+/* This targets both .material-card and .doubt-card */
+
+.material-card,
+.doubt-card {
+  /* Darker, less transparent background for readability */
+  background: rgba(10, 20, 30, 0.75); 
+  backdrop-filter: blur(10px);
+  /* A subtle border to define the shape */
+  border: 1px solid rgba(0, 255, 208, 0.2); 
+  padding: 25px; /* Increased padding */
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.material-card:hover,
+.doubt-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 255, 208, 0.5);
+}
+
+/* Bigger, brighter text inside the cards */
+.material-card h3,
+.doubt-card h3 {
+  color: #00ffd0; /* Use the main accent color for titles */
+  font-size: 1.4rem; /* Larger font size */
+  margin-bottom: 10px;
+}
+
+.material-card p,
+.doubt-card p {
+  color: #e0e0e0; /* A soft, bright white for better contrast */
+  font-size: 1rem; /* Slightly larger paragraph text */
+  line-height: 1.6;
+}
+
+/* Style the links inside the cards */
+.material-card a,
+.doubt-card a {
+  display: inline-block;
+  margin-top: 15px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #008070;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.material-card a:hover,
+.doubt-card a:hover {
+  background-color: #00ffd0;
+  color: #000;
+}
+
+
+/* --- 2. Leaderboard Table Redesign (Main & Mini) --- */
+/* This targets all tables inside a .leaderboard container */
+
+.leaderboard table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  overflow: hidden; /* Important for the border-radius to work */
+  font-size: 1.1rem; /* Increase base font size */
+  border: 1px solid rgba(0, 255, 208, 0.2);
+}
+
+/* Table Header styling */
+.leaderboard thead {
+  background-color: rgba(0, 255, 208, 0.1);
+}
+
+.leaderboard th {
+  padding: 18px 20px; /* More padding */
+  color: #00ffd0;
+  text-align: left;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Table Body styling */
+.leaderboard td {
+  padding: 18px 20px; /* More padding */
+  color: #e0e0e0;
+  border-top: 1px solid rgba(0, 255, 208, 0.1);
+}
+
+.leaderboard tbody tr {
+  transition: background-color 0.3s;
+}
+
+.leaderboard tbody tr:hover {
+  background-color: rgba(0, 255, 208, 0.08);
+}
+
+/* Specific adjustment for the smaller game leaderboards */
+.mini-leaderboard table {
+    font-size: 1rem; /* Make the font slightly smaller to fit */
+}
+.mini-leaderboard th,
+.mini-leaderboard td {
+    padding: 12px 15px;
+}
+
+/* --- Global Background Overlay Style --- */
+
+.background-overlay {
+  /* Position it to cover the entire screen, always */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* The color: black with 60% opacity */
+  background-color: rgba(0, 0, 0, 0.4); 
+
+  /* This is the magic part: it places the overlay BEHIND your
+     main content, but IN FRONT of the body's background image. */
+  z-index: -1; 
+}
+
+/* --- New Footer and About Page Styles --- */
+
+/* Footer */
+site-footer {
+  background-color: rgba(10, 20, 30, 0.85); /* Slightly more opaque */
+  border-top: 1px solid rgba(0, 255, 208, 0.2);
+  padding: 50px 50px; /* Increased padding to make it bigger */
+  margin-top: auto; /* This is part of the sticky footer fix */
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-info .logo {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+footer-info p {
+  color: #aaa;
+  font-size: 0.2rem; 
+}
+
+.footer-nav a {
+  color: #ccc;
+  text-decoration: none;
+  margin-left: 25px;
+  font-size: 0.9rem; 
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.footer-nav a:hover {
+  color: #00ffd0;
+  text-decoration: underline;
+}
+
+/* About Us Page */
+.about-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.about-card {
+  background: rgba(10, 20, 30, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 208, 0.2);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.about-card h2 {
+  color: #00ffd0;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+.about-card p {
+  color: #e0e0e0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* Logout button styling (from an earlier step, good to consolidate) */
+.logout-button {
+  background: none;
+  border: none;
+  color: #cccccc;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  padding: 0;
+  margin-left: 12px;
+  font-weight: 500;
+}
+.logout-button:hover {
+  color: #00ffd0;
+}
+
+/* --- New Meme Module Styles (Likes & Comments) --- */
+.gallery-link { display: block; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; }
+.author-info-small { display: flex; align-items: center; gap: 8px; }
+.author-info-small img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+.author-info-small span { color: #ccc; font-weight: 500; }
+.like-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid #555; color: #fff; padding: 6px 12px; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+.like-btn.liked { background-color: #e91e63; border-color: #e91e63; }
+.like-btn:hover { border-color: #e91e63; }
+
+/* Detail Page */
+.meme-detail-container { display: flex; max-width: 1200px; margin: 40px auto; height: 80vh; background: #111; border-radius: 16px; overflow: hidden; }
+.meme-content { flex: 2; background-color: #000; display: flex; align-items: center; justify-content: center; }
+.meme-content img, .meme-content iframe { max-width: 100%; max-height: 100%; }
+.meme-sidebar { flex: 1; min-width: 350px; padding: 20px; display: flex; flex-direction: column; }
+.author-info { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+.author-info img { width: 40px; height: 40px; border-radius: 50%; }
+.author-info a { color: #fff; font-weight: bold; text-decoration: none; }
+.caption-detail { color: #ddd; padding: 15px 0; }
+.comments-section { flex-grow: 1; display: flex; flex-direction: column; }
+.comment-list { flex-grow: 1; overflow-y: auto; margin-bottom: 15px; }
+.comment { margin-bottom: 10px; line-height: 1.4; }
+.comment strong { color: #00ffd0; }
+.comment-form { display: flex; gap: 10px; }
+.comment-form textarea { flex-grow: 1; }
+.comment-form button { background-color: #00ffd0; color: #000; font-weight: bold; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; }
+
+
+/* --- New Forum Voting Styles --- */
+.reply-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+.vote-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 5px;
+}
+.vote-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: color 0.2s, transform 0.2s;
+}
+.vote-btn:hover {
+  color: #fff;
+  transform: scale(1.1);
+}
+.vote-btn.active {
+  color: #00ffd0; /* Highlighted color when user has voted */
+}
+.vote-count {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  padding: 5px 0;
+}
+.reply-content {
+  flex-grow: 1;
+}
+
+/* ==========================================================================
+   PAGINATION STYLES (Used on all "View All" pages)
+   ========================================================================== */
+
+.pagination {
+  margin-top: 50px; /* Add more space above the pagination bar */
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-btn {
+  display: inline-block;
+  padding: 10px 18px; /* Make the buttons a bit larger */
+  background-color: rgba(0, 255, 208, 0.1);
+  border: 1px solid rgba(0, 255, 208, 0.3);
+  color: #00ffd0;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.page-btn:hover {
+  background-color: #00ffd0;
+  color: #000;
+  transform: translateY(-2px); /* Add a slight lift on hover */
+}
+
+/* This is the style for the currently active page number */
+.page-btn.active {
+  background-color: #00ffd0;
+  color: #000;
+  cursor: default;
+  transform: none; /* No hover effect on the active page */
+}
+
+/* ==========================================================================
+   8. MOBILE RESPONSIVE STYLES (Final, Corrected Version)
+   ========================================================================== */
+
+/* --- By default, on desktop, the hamburger button is hidden --- */
+.hamburger-button {
+  display: none;
+  z-index: 1001; /* High z-index to stay on top */
+}
+
+/* These styles will ONLY apply on screens 900px wide or smaller */
+@media (max-width: 900px) {
+
+  /* --- Responsive Navigation --- */
+  
+  /* On mobile, transform the existing nav into a fullscreen overlay */
+  #main-nav {
+    display: none; /* Hide the nav by default on mobile */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(10, 20, 30, 0.95);
+    backdrop-filter: blur(10px);
+    
+    /* Center the links vertically */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    z-index: 1000; /* Ensure menu is on top of content */
+  }
+  
+  /* This rule makes the nav appear when the button is clicked */
+  #main-nav.active {
+    display: flex;
+  }
+  
+  /* Make the links larger for easy tapping */
+  #main-nav a, #main-nav .logout-button {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fff;
+    margin: 10px 0; /* Add vertical spacing */
+  }
+  
+  /* --- Hamburger Menu Button Styling --- */
+  .hamburger-button {
+    display: flex; /* Show the hamburger button ONLY on mobile */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .hamburger-button span {
+    width: 30px;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 3px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Animate hamburger to an 'X' when active */
+  .hamburger-button.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .hamburger-button.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger-button.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+
+  /* --- Layout Stacking for Two-Column Pages --- */
+  .profile-container,
+  .item-detail-container,
+  .game-area-wrapper { /* We will skip .reaction-game-wrapper as it doesn't exist */
+    flex-direction: column;
+    align-items: center;
+  }
+  .profile-sidebar,
+  .game-leaderboard-container {
+    flex-basis: auto;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  /* --- General Padding Adjustments for Mobile --- */
+  .card-grid,
+  .leaderboard,
+  .form-container,
+  .notice-form-container,
+  .modules {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* Animate to 'X' */
+  .hamburger-button.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .hamburger-button.active span:nth-child(2) { opacity: 0; }
+  .hamburger-button.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+
+  /* --- Layout Stacking --- */
+  .profile-container, .item-detail-container, .game-area-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .profile-sidebar, .game-leaderboard-container {
+    flex-basis: auto;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  @media (max-width: 480px) {
+  header { padding: 15px 20px; }
+  .logo { font-size: 1.5rem; }
+
+  .hero { padding: 50px 15px; }
+  .hero h1 { font-size: 2rem; }
+  .hero p { font-size: 1rem; }
+
+  #main-nav a, #main-nav .logout-button {
+    font-size: 1.5rem; /* Further reduce font size in menu */
+  }
+
+  .form-container, .notice-form-container {
+    padding: 25px;
+  }
+  
+  .card-grid {
+    padding: 0 15px;
+  }
+}
+
+/* --- New Forum Image Modal Styles --- */
+
+.view-image-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #008070;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.view-image-btn:hover {
+  background-color: #00ffd0;
+  color: #000;
+}
+
+/* The Modal (background) */
+.image-modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1002; /* Sit on top of everything */
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,0.9);
+}
+
+/* Modal Content (the image) */
+.image-modal-content {
+  margin: auto;
+  display: block;
+  max-width: 80%;
+  max-height: 80vh;
+}
+
+/* Caption of Image */
+#imageCaption {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+}
+
+/* The Close Button */
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.close-modal-btn:hover,
+.close-modal-btn:focus {
+  color: #bbb;
+}
+
+/* --- Forum Image Modal Styles --- */
+
+.view-image-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #008070;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.view-image-btn:hover {
+  background-color: #00ffd0;
+  color: #000;
+}
+
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 1002;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.9);
+}
+
+.image-modal-content {
+  margin: auto;
+  display: block;
+  max-width: 80%;
+  max-height: 80vh;
+}
+
+#imageCaption {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.close-modal-btn:hover,
+.close-modal-btn:focus {
+  color: #bbb;
+}
+
+/* --- Form Field Structure (Used in Notices, Ask Doubt, etc.) --- */
+
+/* This targets the individual form rows (label + input) */
+.form-field {
+  margin-bottom: 1.5rem; /* Adds consistent space between form fields */
+}
+
+/* This styles the file input button to look better */
+.form-container input[type="file"] {
+  background-color: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  padding: 10px;
+}
+
+/* --- Universal File Input Style --- */
+.form-container input[type="file"],
+.notice-form-container input[type="file"] {
+  background-color: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  padding: 10px;
+}
+
+
+/* --- Clickable Logo Style Reset --- */
+
+/* This ensures the link has no underline */
+.logo-link {
+  text-decoration: none;
+}
+
+/* This ensures the logo text keeps its original color */
+.logo-link .logo {
+  color: #00ffd0;
+}
+
+/* --- Django Messages Styling --- */
+
+.messages-container {
+  max-width: 900px;
+  margin: -20px auto 20px auto; /* Position it nicely below the hero */
+  padding: 0 20px;
+}
+
+.message {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.message.success {
+  background-color: rgba(0, 255, 208, 0.2);
+  border: 1px solid #00ffd0;
+  color: #00ffd0;
+}
+
+.message.error {
+  background-color: rgba(255, 75, 75, 0.2);
+  border: 1px solid #ff4b4b;
+  color: #ff4b4b;
+}
+
+/* ==========================================================================
+   GAME MODULE - MOBILE RESPONSIVE STYLES
+   ========================================================================== */
+
+/* By default on desktop, the on-screen controls are hidden */
+.mobile-controls {
+  display: none;
+}
+
+/* These styles will ONLY apply on screens 900px wide or smaller */
+@media (max-width: 900px) {
+
+  /* --- 1. Responsive Layout for Game Pages --- */
+  .game-area-wrapper {
+    /* Stack the leaderboard and the game vertically */
+    flex-direction: column;
+    align-items: center;
+  }
+  .game-leaderboard-container {
+    flex-basis: auto; /* Allow it to resize */
+    width: 100%;
+    max-width: 500px; /* But don't let it get too wide on tablets */
+  }
+
+  /* --- 2. On-Screen Game Controls (Visible only on mobile) --- */
+  .mobile-controls {
+    display: grid; /* This makes the buttons visible */
+    margin-top: 20px;
+    width: 210px;
+    height: 140px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Positioning for Dino Run controls */
+  .jump-btn { grid-column: 1 / -1; grid-row: 1; font-weight: bold; }
+  .duck-btn { grid-column: 1 / -1; grid-row: 2; font-weight: bold; }
+
+ 
+    .d-pad-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    width: 100px; /* Button width */
+    height: 100px; /* Button height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+    .d-pad-btn:active {
+    background-color: #00ffd0;
+  }
+
+
+    .dino-controls { 
+      flex-direction: column; 
+      gap: 10px; 
+      height: auto; 
+      width: 100%; 
+      max-width: 220px; 
+  }
+  .dino-controls .d-pad-btn {
+      width: 100%;
+      height: 60px;
+      border-radius: 20px;
+      font-weight: bold;
+  }
+}
+
+
+/* --- New Personalized Leaderboard Styles --- */
+.leaderboard .current-user-row {
+  background-color: rgba(0, 255, 208, 0.15);
+  font-weight: bold;
+}
+.leaderboard .separator-row td {
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 5px;
+  color: #555;
+  border: none;
+}
+.profile-main-rank {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  color: #ccc;
+  font-weight: 500;
+}

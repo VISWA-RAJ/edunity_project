@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}All Doubts - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>All Doubts</h1>
+    <p>Browse the complete archive of questions.</p>
+  </section>
+
+    <section class="doubt-feed">
+    {% for doubt in doubts %}
+      <div class="doubt-card">
+        <h3>🧠 {{ doubt.title }}</h3>
+        <p>{{ doubt.description|truncatewords:30 }}</p>
+        <p><small>Asked by: {{ doubt.author.username }} on {{ doubt.created_at|date:"d M Y" }}</small></p>
+        {# --- THIS IS THE CORRECTED LINK --- #}
+        <a href="{% url 'doubt_detail' doubt.id %}">View Replies ({{ doubt.replies.count }})</a>
+      </div>
+    {% empty %}
+      <p style="color: #ccc;">No doubts have been asked yet.</p>
+    {% endfor %}
+  </section>
+  
+    {# --- PAGINATION SECTION --- #}
+    {% if doubts.has_other_pages %}
+      <div class="pagination">
+        {% if doubts.has_previous %}<a href="?page={{ doubts.previous_page_number }}" class="page-btn">&laquo; Previous</a>{% endif %}
+        {% for num in doubts.paginator.page_range %}
+          {% if doubts.number == num %}<span class="page-btn active">{{ num }}</span>
+          {% else %}<a href="?page={{ num }}" class="page-btn">{{ num }}</a>{% endif %}
+        {% endfor %}
+        {% if doubts.has_next %}<a href="?page={{ doubts.next_page_number }}" class="page-btn">Next &raquo;</a>{% endif %}
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Post a Video - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Post a Video</h1>
+    <p>Copy and paste a link from Instagram Reels or YouTube Shorts.</p>
+  </section>
+  <div class="auth-form-container">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="auth-button">Post Video</button>
+    </form>
+  </div>
+{% endblock %}

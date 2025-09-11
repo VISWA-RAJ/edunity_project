@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Lost & Found - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Lost & Found</h1>
+    <p>Browse recently reported lost items.</p>
+    <div class="buttons" style="margin-top: 20px;">
+        <a href="{% url 'report_lost' %}" style="background-color: #00ffd0; color: #000; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: bold;">Report a Lost Item</a>
+    </div>
+  </section>
+
+
+  {# --- ADD THIS ENTIRE NEW BLOCK --- #}
+  {% if messages %}
+    <div class="messages-container">
+      {% for message in messages %}
+        <p class="message {{ message.tags }}">{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <section class="lost-items">
+    <h2>Recently Reported Items</h2>
+    <div class="item-grid">
+  {% for item in recent_items %}
+    <div class="item-card">
+      {% if item.image %}
+        <a href="{% url 'item_detail' item.id %}"><img src="{{ item.image.url }}" alt="{{ item.item_name }}"></a>
+      {% else %}
+        <a href="{% url 'item_detail' item.id %}"><img src="https://placehold.co/200x150/000000/00ffd0?text=Item" alt="No image"></a>
+      {% endif %}
+      
+      <h3><a href="{% url 'item_detail' item.id %}" class="item-title-link">{{ item.item_name }}</a></h3>
+      <p class="item-author">Posted by: {{ item.reported_by.username }}</p>
+      
+      <div class="item-card-actions">
+        {% if item.reported_by == request.user %}
+          <form action="{% url 'delete_lost_item' item.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="friend-btn remove-friend">Delete Post</button>
+          </form>
+        {% else %}
+          <form action="{% url 'found_item' item.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="found-btn">I Found This!</button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  {% empty %}
+    <p style="color: #ccc;">No lost items have been reported recently.</p>
+  {% endfor %}
+</div>
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'all_lost_items' %}" style="color: #00ffd0; font-size: 1.1rem; font-weight: bold;">View All Lost Items...</a>
+    </div>
+  </section>
+{% endblock %}

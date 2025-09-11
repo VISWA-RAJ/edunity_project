@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}All Study Materials - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>All Study Materials</h1>
+    <p>Browse the full library of shared resources.</p>
+
+    {# --- THIS IS THE NEW SEARCH BAR --- #}
+    {# It uses the same style as your "Find Friends" search bar #}
+    <form method="GET" action="{% url 'material_list' %}" class="search-form">
+      <input type="text" name="q" placeholder="Search by title or description..." value="{{ query|default:'' }}">
+      <button type="submit">Search</button>
+    </form>
+  </section>
+
+  <section class="shared-materials">
+    <div class="material-grid">
+      {% for material in materials %}
+        <div class="material-card">
+          <h3>📘 {{ material.title }}</h3>
+          <p>{{ material.description }}</p>
+          <p><small>Uploaded by: {{ material.uploader.username }}</small></p>
+          <a href="{{ material.uploaded_file.url }}" target="_blank">View/Download</a>
+        </div>
+      {% empty %}
+        <p style="color: #ccc;">No materials found matching your search.</p>
+      {% endfor %}
+    </div>
+
+    {# --- UPDATED PAGINATION SECTION --- #}
+    {# The links now include the search query to work correctly #}
+    {% if materials.has_other_pages %}
+      <div class="pagination">
+        {% if materials.has_previous %}
+          <a href="?q={{ query|default:'' }}&page={{ materials.previous_page_number }}" class="page-btn">&laquo; Previous</a>
+        {% endif %}
+
+        {% for num in materials.paginator.page_range %}
+          {% if materials.number == num %}
+            <span class="page-btn active">{{ num }}</span>
+          {% else %}
+            <a href="?q={{ query|default:'' }}&page={{ num }}" class="page-btn">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if materials.has_next %}
+          <a href="?q={{ query|default:'' }}&page={{ materials.next_page_number }}" class="page-btn">Next &raquo;</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

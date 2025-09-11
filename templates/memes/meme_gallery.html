@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Meme Gallery - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>📸 The Meme Gallery</h1>
+    <p>Check out the latest posts from the community!</p>
+  </section>
+
+  <div class="gallery" id="gallery">
+    {% for meme in memes %}
+      <div class="gallery-card">
+        {% if meme.meme_type == 'IMAGE' and meme.image %}
+          <a href="{% url 'meme_detail' meme.id %}" class="gallery-link">
+            <img src="{{ meme.image.url }}" alt="{{ meme.caption }}" />
+          </a>
+        {% elif meme.meme_type == 'VIDEO' %}
+          <div class="video-link-card">
+            <p class="video-caption">"{{ meme.caption }}"</p>
+            <a href="{{ meme.video_link }}" target="_blank" class="watch-button">
+              {% if 'instagram' in meme.video_link %}Watch on Instagram{% else %}Watch on YouTube{% endif %}
+            </a>
+          </div>
+        {% endif %}
+        
+        <div class="card-footer">
+          <a href="{% url 'view_user_profile' meme.author.username %}" class="author-info-small">
+            <img src="{{ meme.author.profile.image.url }}">
+            <span>{{ meme.author.username }}</span>
+          </a>
+          <div class="card-actions">
+            <a href="{% url 'meme_detail' meme.id %}" class="comment-btn">💬 {{ meme.comments.count }}</a>
+            <form action="{% url 'like_meme' meme.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="like-btn {% if request.user in meme.likes.all %}liked{% endif %}">
+                ♥ {{ meme.likes.count }}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p style="color: #ccc; text-align: center; grid-column: 1 / -1;">The gallery is empty!</p>
+    {% endfor %}
+  </div>
+  
+  {% if memes.has_other_pages %}
+    <div class="pagination">
+      {% for num in memes.paginator.page_range %}{% if memes.number == num %}<span class="page-btn active">{{ num }}</span>{% else %}<a href="?page={{ num }}" class="page-btn">{{ num }}</a>{% endif %}{% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

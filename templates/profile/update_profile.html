@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Update Your Profile{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Update Your Profile</h1>
+    <p>Change your profile picture and tell us about yourself.</p>
+  </section>
+  <div class="notice-form-container">
+    {% if messages %}
+      {% for message in messages %}
+        <p class="profile-success-message">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-field">{{ form.bio.label_tag }}{{ form.bio }}</div>
+      <div class="form-field">{{ form.image.label_tag }}{{ form.image }}</div>
+      <button type="submit" class="auth-button">Save Changes</button>
+    </form>
+  </div>
+{% endblock %}

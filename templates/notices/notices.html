@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Notices - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>📢 Campus Notices</h1>
+    <p>The official announcement board. Stay updated!</p>
+    <div class="buttons" style="margin-top: 20px;">
+        <a href="{% url 'post_notice' %}" style="background-color: #00ffd0; color: #000; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: bold;">Post a New Notice</a>
+    </div>
+  </section>
+
+  <section class="notices-list" id="noticesList">
+    {% for notice in notices %}
+      <div class="notice-card {{ notice.category }}">
+  <h3>{{ notice.title }}</h3>
+  <span class="tag">{{ notice.get_category_display }}</span>
+  <p>{{ notice.content|linebreaksbr }}</p>
+  
+  <p class="notice-meta">
+    Posted by: {{ notice.author.username }}
+    {# --- NEW: Show the expiry time if it exists --- #}
+    {% if notice.expiry_date %}
+      <br>
+      <span style="color: #f1c40f;">Expires in: {{ notice.expiry_date|timeuntil }}</span>
+    {% endif %}
+  </p>
+</div>
+    {% empty %}
+      <p style="color: #ccc; text-align: center;">No notices have been posted yet.</p>
+    {% endfor %}
+  </section>
+{% endblock %}
