@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -120,7 +121,7 @@ USE_TZ = True
 # STATIC & MEDIA FILES (For Production)
 # ==============================================================================
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 # This is where your CSS and JS files are in development
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
