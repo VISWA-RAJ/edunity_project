@@ -41,7 +41,7 @@
       <div class="friends-list">
         {% for friend_profile in friends_of_viewed_user %}
           <a href="{% url 'view_user_profile' friend_profile.user.username %}" class="friend-card">
-            <img src="{{ friend_profile.image.url }}" alt="{{ friend_profile.user.username }}">
+            <img src="{{ profile.image_url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-picture">
             <span>{{ friend_profile.user.username }}</span>
           </a>
         {% empty %}

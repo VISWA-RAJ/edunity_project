@@ -17,4 +17,4 @@ venv/
 # OS generated files
 .DS_Store
 Thumbs.db
-*.onetoc2
+*.onetoc2.venv/

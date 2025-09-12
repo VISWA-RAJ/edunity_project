@@ -4,7 +4,7 @@
 {% block content %}
   <div class="profile-container">
     <aside class="profile-sidebar">
-      <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-picture">
+      <img src="{{ profile.image_url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-picture">
       <div class="profile-info">
         <h1 class="profile-username">{{ profile.user.username }}</h1>
         <p class="profile-email">{{ profile.user.email }}</p>
@@ -77,7 +77,7 @@
     <div class="friends-list">
       {% for friend_profile in friends %}
         <a href="{% url 'view_user_profile' friend_profile.user.username %}" class="friend-card">
-          <img src="{{ friend_profile.image.url }}" alt="{{ friend_profile.user.username }}">
+          <img src="{{ friend_profile.image_url }}" alt="{{ friend_profile.user.username }}">
           <span>{{ friend_profile.user.username }}</span>
         </a>
       {% empty %}
