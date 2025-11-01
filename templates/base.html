@@ -29,12 +29,50 @@
           <a href="{% url 'games' %}">Games</a>
           <a href="{% url 'leaderboard' %}">Leaderboard</a>
           <a href="{% url 'about_us' %}">About</a>
-          <a href="{% url 'my_profile' %}" class="profile-nav-link">
-            Profile
-            {% if total_notifications > 0 %}
-              <span class="notification-badge">{{ total_notifications }}</span>
-            {% endif %}
-          </a>
+          
+          {# --- THIS IS THE MODIFIED NOTIFICATION/PROFILE LINK --- #}
+          <div class="notification-menu-container">
+            <a href="#" class="profile-nav-link" id="notification-toggle">
+              Profile
+              {% if total_notifications > 0 %}
+                <span class="notification-badge">{{ total_notifications }}</span>
+              {% endif %}
+            </a>
+            
+            {# --- THIS IS THE NEW DROPDOWN MENU --- #}
+            <div class="notification-dropdown" id="notification-dropdown">
+              <div class="notification-header">
+                <h3>Notifications</h3>
+              </div>
+              <div class="notification-list">
+                {% for request in pending_friend_requests %}
+                  <a href="{% url 'my_profile' %}" class="notification-item">
+                    <img src="{{ request.from_user.profile.image_url }}" alt="{{ request.from_user.username }}">
+                    <p><strong>{{ request.from_user.username }}</strong> sent you a friend request.</p>
+                  </a>
+                {% endfor %}
+                {% for notification in recent_notifications %}
+                  <a href="{{ notification.link|default:'#' }}" class="notification-item">
+                    {% if notification.sender %}
+                      <img src="{{ notification.sender.profile.image_url }}" alt="{{ notification.sender.username }}">
+                    {% endif %}
+                    <p>{{ notification.message }}</p>
+                  </a>
+                {% endfor %}
+                
+                {% if not pending_friend_requests and not recent_notifications %}
+                  <div class="notification-item empty">
+                    <p>You have no new notifications.</p>
+                  </div>
+                {% endif %}
+              </div>
+              <a href="{% url 'my_profile' %}" class="notification-footer">
+                View Full Profile
+              </a>
+            </div>
+          </div>
+          {# --- END OF MODIFIED BLOCK --- #}
+
           <form action="{% url 'logout' %}" method="post" style="display: inline;"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button type="submit" class="logout-button">Logout</button></form>
         {% else %}
           <a href="{% url 'home' %}">Home</a>
@@ -77,7 +115,7 @@
     });
   </script>
 
-  {# --- THE FIX IS HERE: THIS SCRIPT MAKES THE "SHOW" BUTTON WORK --- #}
+  {# --- THIS SCRIPT MAKES THE "SHOW" BUTTON WORK --- #}
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       // Find all the "Show" buttons on the page
@@ -98,6 +136,28 @@
           }
         });
       });
+    });
+  </script>
+
+  {# --- NEW SCRIPT FOR NOTIFICATION DROPDOWN --- #}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleButton = document.getElementById('notification-toggle');
+      const dropdownMenu = document.getElementById('notification-dropdown');
+
+      if (toggleButton) {
+        toggleButton.addEventListener('click', function (e) {
+          e.preventDefault(); // Prevent the link from navigating
+          dropdownMenu.classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks outside of it
+        window.addEventListener('click', function (e) {
+          if (!toggleButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.classList.remove('show');
+          }
+        });
+      }
     });
   </script>
 

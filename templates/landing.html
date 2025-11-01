@@ -15,10 +15,12 @@
     <h2 style="color: #ffffff;">A Glimpse of Our Features</h2>
     <p style="color: #cccccc; margin-bottom: 40px;">Create an account to access all features.</p>
     <div class="card-grid">
-        <div class="card" style="opacity: 0.7;"><h3>📘 Study Materials</h3><p>Share and access study resources.</p></div>
-        <div class="card" style="opacity: 0.7;"><h3>🎒 Lost & Found</h3><p>Report and find lost items easily.</p></div>
-        <div class="card" style="opacity: 0.7;"><h3>💬 Forum</h3><p>Discuss doubts and topics with peers.</p></div>
-        <div class="card" style="opacity: 0.7;"><h3>📊 Polling</h3><p>Engage with live campus polls.</p></div>
+        {# --- THESE ARE THE 4 MODIFIED LINES --- #}
+        {# We've replaced the 'div' tags with 'a' tags pointing to the login page #}
+        <a href="{% url 'login' %}" class="card" style="opacity: 0.7;"><h3>📘 Study Materials</h3><p>Share and access study resources.</p></a>
+        <a href="{% url 'login' %}" class="card" style="opacity: 0.7;"><h3>🎒 Lost & Found</h3><p>Report and find lost items easily.</p></a>
+        <a href="{% url 'login' %}" class="card" style="opacity: 0.7;"><h3>💬 Forum</h3><p>Discuss doubts and topics with peers.</p></a>
+        <a href="{% url 'login' %}" class="card" style="opacity: 0.7;"><h3>📊 Polling</h3><p>Engage with live campus polls.</p></a>
     </div>
   </section>
 {% endblock %}

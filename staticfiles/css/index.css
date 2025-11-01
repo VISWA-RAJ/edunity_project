@@ -3448,3 +3448,113 @@ footer-info p {
   color: #ccc;
   font-weight: 500;
 }
+
+/* ... (all your existing CSS from index.css) ... */
+
+/* ==========================================================================
+   NEW NOTIFICATION DROPDOWN STYLES
+   ========================================================================== */
+
+/* This container holds the link and the dropdown */
+.notification-menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* The dropdown menu itself (hidden by default) */
+.notification-dropdown {
+  display: none; /* Hide it by default */
+  position: absolute;
+  top: 50px; /* Position it below the header link */
+  right: 0;
+  width: 380px;
+  max-height: 450px;
+  background-color: rgba(10, 20, 30, 0.85); /* Dark, glassy background */
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 255, 208, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  z-index: 1001; /* Ensure it's above other content */
+  overflow: hidden;
+  display: none; /* Hidden by default */
+  flex-direction: column;
+}
+
+/* This class is added by JavaScript to show the menu */
+.notification-dropdown.show {
+  display: flex;
+}
+
+.notification-dropdown .notification-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(0, 255, 208, 0.2);
+}
+
+.notification-dropdown .notification-header h3 {
+  color: #fff;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+/* This is the scrollable list area */
+.notification-list {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+/* Style for each item in the list */
+.notification-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: rgba(0, 255, 208, 0.1);
+}
+
+.notification-item.empty p {
+  color: #aaa;
+  font-style: italic;
+  width: 100%;
+  text-align: center;
+}
+
+.notification-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.notification-item p {
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.notification-item p strong {
+  color: #00ffd0; /* Highlight usernames */
+}
+
+/* The "View All" link at the bottom */
+.notification-footer {
+  padding: 15px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  color: #00ffd0;
+  background-color: rgba(0, 255, 208, 0.05);
+  border-top: 1px solid rgba(0, 255, 208, 0.2);
+  transition: background-color 0.2s;
+}
+
+.notification-footer:hover {
+  background-color: rgba(0, 255, 208, 0.15);
+}

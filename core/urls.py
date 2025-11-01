@@ -18,10 +18,15 @@ urlpatterns = [
     path('friend-request/accept/<int:request_id>/', views.accept_friend_request_view, name='accept_friend_request'),
     path('friend-request/decline/<int:request_id>/', views.decline_friend_request_view, name='decline_friend_request'),
     
+    # --- THIS IS THE NEW URL FOR UNFRIENDING ---
+    path('unfriend/<str:username>/', views.unfriend_view, name='unfriend'),
+    
     path('notification/dismiss/<int:notification_id>/', views.dismiss_notification_view, name='dismiss_notification'),
     
     # --- THIS IS THE NEW "CLEAR ALL" URL ---
     path('notifications/clear-all/', views.clear_all_notifications_view, name='clear_all_notifications'),
 
     path('about/', views.about_us_view, name='about_us'),
+
+    
 ]

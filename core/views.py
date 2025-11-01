@@ -127,6 +127,22 @@ def view_user_profile_view(request, username):
     }
     return render(request, 'profile/view_user_profile.html', context)
 
+# --- THIS IS THE NEW VIEW TO HANDLE UNFRIENDING ---
+@login_required
+def unfriend_view(request, username):
+    if request.method == 'POST':
+        user_to_unfriend = get_object_or_404(User, username=username)
+        my_profile = request.user.profile
+        friend_profile = user_to_unfriend.profile
+        
+        # Remove them from each other's friends list
+        my_profile.friends.remove(friend_profile)
+        friend_profile.friends.remove(my_profile)
+    
+    # Redirect back to the profile page of the user you just unfriended
+    return redirect('view_user_profile', username=username)
+
+
 # --- Friend and Notification Action Views ---
 @login_required
 def send_friend_request_view(request, username):

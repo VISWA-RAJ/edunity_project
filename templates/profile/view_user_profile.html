@@ -4,7 +4,7 @@
 {% block content %}
   <div class="profile-container">
     <aside class="profile-sidebar">
-      <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-picture">
+      <img src="{{ profile.image_url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-picture">
       <div class="profile-info">
         <h1 class="profile-username">{{ profile.user.username }}</h1>
         <p class="profile-email">{{ profile.user.email }}</p>
@@ -14,8 +14,12 @@
       
       {# --- DYNAMIC FRIENDSHIP BUTTON LOGIC --- #}
       {% if is_friend %}
-        {# We don't have remove friend functionality from this page yet #}
-        <button class="friend-btn" disabled>Friends</button>
+        {# --- THIS IS THE UPDATED BLOCK --- #}
+        {# It is now a form that submits to the 'unfriend' URL #}
+        <form action="{% url 'unfriend' profile.user.username %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="friend-btn remove-friend">Remove Friend</button>
+        </form>
       {% elif request_sent %}
         <button class="friend-btn" disabled>Request Sent</button>
       {% elif request_received %}
@@ -41,13 +45,19 @@
       <div class="friends-list">
         {% for friend_profile in friends_of_viewed_user %}
           <a href="{% url 'view_user_profile' friend_profile.user.username %}" class="friend-card">
-            <img src="{{ profile.image_url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-picture">
+            <img src="{{ friend_profile.image_url }}" alt="{{ friend_profile.user.username }}'s Profile Picture" class="profile-picture">
             <span>{{ friend_profile.user.username }}</span>
           </a>
         {% empty %}
           <p style="color: #ccc;">This user hasn't added any friends yet.</p>
         {% endfor %}
       </div>
+    </div>
+  {% else %}
+    {# --- THIS IS NEW: HIDE FRIENDS LIST IF YOU AREN'T FRIENDS --- #}
+    <div class="bio-section">
+      <h2>Friends</h2>
+      <p style="color: #ccc;">You must be friends with this user to see their friends list.</p>
     </div>
   {% endif %}
 

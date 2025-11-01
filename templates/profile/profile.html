@@ -41,7 +41,8 @@
   {% for request in friend_requests %}
     <div class="friend-request-card">
       <a href="{% url 'view_user_profile' request.from_user.username %}" class="request-info">
-        <img src="{{ request.from_user.profile.image.url }}" alt="{{ request.from_user.username }}">
+        {# --- THIS IS THE CORRECTED LINE --- #}
+        <img src="{{ request.from_user.profile.image_url }}" alt="{{ request.from_user.username }}">
         <span><strong>{{ request.from_user.username }}</strong> sent you a friend request.</span>
       </a>
       <div class="request-actions">
@@ -54,7 +55,8 @@
     <div class="notification-card">
       <a href="{{ notification.link }}" class="request-info" style="text-decoration: none;">
         {% if notification.sender %}
-          <img src="{{ notification.sender.profile.image.url }}" alt="{{ notification.sender.username }}">
+          {# --- THIS ONE NEEDS TO BE FIXED TOO --- #}
+          <img src="{{ notification.sender.profile.image_url }}" alt="{{ notification.sender.username }}">
         {% endif %}
         <span>{{ notification.message }}</span>
       </a>
@@ -77,6 +79,7 @@
     <div class="friends-list">
       {% for friend_profile in friends %}
         <a href="{% url 'view_user_profile' friend_profile.user.username %}" class="friend-card">
+          {# --- AND THIS ONE --- #}
           <img src="{{ friend_profile.image_url }}" alt="{{ friend_profile.user.username }}">
           <span>{{ friend_profile.user.username }}</span>
         </a>
