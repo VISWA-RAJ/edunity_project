@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.templatetags.static import static
+from shop.models import ShopItem # <-- IMPORT THE NEW SHOP ITEM
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -11,6 +12,11 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     bio = models.TextField(max_length=500, blank=True, null=True, help_text="Tell us a little about yourself.")
     friends = models.ManyToManyField('self', blank=True)
+
+    # --- NEW FIELDS FOR THE SHOP/ECONOMY ---
+    tokens = models.IntegerField(default=0, help_text="Spendable currency")
+    purchased_items = models.ManyToManyField(ShopItem, blank=True, help_text="Items the user has bought")
+    # --- END OF NEW FIELDS ---
 
 
     @property

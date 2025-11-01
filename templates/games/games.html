@@ -46,7 +46,6 @@
       <p>Navigate the pipes in this classic challenge.</p>
       <a href="{% url 'flappy_bird' %}">Play Now</a>
     </div>
-    {# --- NEW DINO GAME CARD --- #}
     <div class="game-card">
       <h3>🦖 Dino Run</h3>
       <p>Jump and duck to avoid the obstacles.</p>
@@ -59,5 +58,18 @@
       <a href="{% url 'coin_collector' %}">Play Now</a>
     </div>
 
+{# --- MODIFIED LOCKED GAME CARD --- #}
+{# The entire div is now inside the if statement. #}
+{# It will only appear if the user has purchased the item. #}
+{% if "flappy-roast-politics-version" in user_inventory_ids %}
+  <div class="game-card">
+    <h3>👾 Flappy Roast (Politics Version)</h3>
+    <p>An exclusive game, available in the shop!</p>
+    <a href="{% url 'flappy_roast_politics' %}">Play Now</a>
+  </div>
+{% endif %}
+{# --- END OF MODIFIED BLOCK --- #}
+
   </section>
 {% endblock %}
+

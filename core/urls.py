@@ -11,6 +11,10 @@ urlpatterns = [
     
     path('profile/', views.my_profile_view, name='my_profile'),
     path('profile/update/', views.update_profile_view, name='update_profile'),
+    
+    # --- NEW URL FOR POINT CONVERSION ---
+    path('profile/convert/', views.convert_points_view, name='convert_points'),
+    
     path('users/', views.user_list_view, name='user_list'),
     path('user/<str:username>/', views.view_user_profile_view, name='view_user_profile'),
     

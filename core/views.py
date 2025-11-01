@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Profile, FriendRequest, Notification
-from .forms import CustomUserCreationForm, ProfileUpdateForm
+# --- ADD THE NEW FORM ---
+from .forms import CustomUserCreationForm, ProfileUpdateForm, PointConversionForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
 
@@ -61,11 +62,49 @@ def my_profile_view(request):
     elif points >= 50: rank = "Contributor"
     elif points >= 10: rank = "Active Member"
 
+    # --- ADD THE CONVERSION FORM TO THE CONTEXT ---
+    # We pass in the user's current points to the form for validation
+    conversion_form = PointConversionForm(max_points=profile.points)
+
     context = {
-        'profile': profile, 'rank': rank, 'friends': friends,
-        'friend_requests': friend_requests, 'notifications': all_notifications,
+        'profile': profile, 
+        'rank': rank, 
+        'friends': friends,
+        'friend_requests': friend_requests, 
+        'notifications': all_notifications,
+        'conversion_form': conversion_form, # <-- NEW
     }
     return render(request, 'profile/profile.html', context)
+
+# --- NEW VIEW FOR POINT CONVERSION ---
+@login_required
+def convert_points_view(request):
+    if request.method == 'POST':
+        profile = request.user.profile
+        # Pass in the user's points for validation
+        form = PointConversionForm(request.POST, max_points=profile.points)
+        
+        if form.is_valid():
+            points_to_convert = form.cleaned_data['points_to_convert']
+            
+            # Define the conversion rate
+            CONVERSION_RATE = 10
+            tokens_to_gain = points_to_convert // CONVERSION_RATE
+            
+            # Update the profile
+            profile.points -= points_to_convert
+            profile.tokens += tokens_to_gain
+            profile.save()
+            
+            messages.success(request, f"Successfully converted {points_to_convert} points into {tokens_to_gain} Edunity Tokens!")
+        else:
+            # If the form is invalid, add the errors as messages
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
+
+    return redirect('my_profile')
+
 
 @login_required
 def update_profile_view(request):

@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Flappy Roast (Politics Version) - Edunity{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Flappy Roast (Politics Version)</h1>
+    <p>Press Spacebar or tap the screen to flap!</p>
+  </section>
+  
+  {# --- AUDIO ELEMENTS ARE NOW IN THE HTML --- #}
+  {# These are hidden and controlled by our JavaScript #}
+  <audio id="flap-sound" preload="auto"></audio>
+  <audio id="game-music" loop preload="auto"></audio>
+  <audio id="game-over-sound" preload="auto"></audio>
+  {# --- END OF NEW AUDIO --- #}
+
+
+  <div class="game-area-wrapper">
+    <div class="game-leaderboard-container">
+      <h3>Top Players</h3>
+      <table class="leaderboard mini-leaderboard">
+        <tbody>
+          {# This variable `top_scores` comes from the space_invaders_view #}
+          {% for score_entry in top_scores %}
+            <tr>
+              <td>
+                {% if forloop.counter == 1 %}🥇
+                {% elif forloop.counter == 2 %}🥈
+                {% elif forloop.counter == 3 %}🥉
+                {% endif %}
+              </td>
+              <td>{{ score_entry.user.username }}</td>
+              <td>{{ score_entry.score }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="3" style="text-align: center; color: #ccc;">No high scores yet!</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="gameArea" class="game-canvas-container">
+      {# We use the flappy bird canvas style from your CSS #}
+      <canvas id="gameCanvas" class="flappy-bird-canvas" width="320" height="480"></canvas>
+      <div id="fullscreenIcon">
+        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-4V5h-2v5h5V7h-3z"></path></svg>
+      </div>
+      <div id="startOverlay" class="game-over-overlay" style="display: flex;">
+        <div id="startContent">
+          <h2>Ready to Roast?</h2>
+          <button id="startButton" class="game-reset-button">Start Game</button>
+        </div>
+      </div>
+      <div id="gameOverOverlay" class="game-over-overlay" style="text-align: center;">
+        {# --- NEW: Game over image will appear here --- #}
+        <img id="gameOverImage" src="" alt="Game Over" style="max-width: 80%; height: auto; max-height: 200px; border-radius: 12px; margin-bottom: 20px;">
+        <h2>GAME OVER</h2>
+  S     <p>Your Final Score: <span id="finalScore">0</span></p>
+        <button id="playAgainButton" class="game-reset-button">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // --- GETTING ALL DOM ELEMENTS ---
+    const gameArea = document.getElementById('gameArea');
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const startOverlay = document.getElementById('startOverlay');
+    const startButton = document.getElementById('startButton');
+    const startContent = document.getElementById('startContent');
+    const gameOverOverlay = document.getElementById('gameOverOverlay');
+    const finalScoreDisplay = document.getElementById('finalScore');
+    const playAgainButton = document.getElementById('playAgainButton');
+    const fullscreenIcon = document.getElementById('fullscreenIcon');
+    const gameOverImage = document.getElementById('gameOverImage');
+
+    // --- NEW: Get Audio Elements ---
+    const flapSound = document.getElementById('flap-sound');
+    const gameMusic = document.getElementById('game-music');
+    const gameOverSound = document.getElementById('game-over-sound');
+
+    // =================================================================
+    // --- STEP 1: PASTE YOUR IMAGE URLS HERE ---
+    // =================================================================
+    const FRIEND_IMAGE_URL = "https://file.garden/aQYGkQ5K93tCIdzi/modi%20face.jfif";
+    const ENEMY_IMAGE_URL = "https://file.garden/aQYGkQ5K93tCIdzi/rahul%20gandhi%20standing.jfif";
+    const GAME_OVER_IMAGE_URL = "https://file.garden/aQYGkQ5K93tCIdzi/amitabh%20mem.png";
+    
+    // =================================================================
+    // --- STEP 2: PASTE YOUR AUDIO FILE URLS HERE ---
+    // =================================================================
+    const FLAP_SOUND_URL = "https://placehold.co/audio.wav"; 
+    const BACKGROUND_MUSIC_URL = "https://file.garden/aQYGkQ5K93tCIdzi/NEW%20udta%20hi%20firu.mpeg";
+    const GAME_OVER_MUSIC_URL = "https://file.garden/aQYGkQ5K93tCIdzi/dekha%20amitabh%20meme.mpeg";
+    // =================================================================
+    
+    // --- Load Assets ---
+    const friendImage = new Image();
+    friendImage.src = FRIEND_IMAGE_URL;
+
+    const enemyImage = new Image();
+    enemyImage.src = ENEMY_IMAGE_URL;
+
+    // Set audio sources
+    flapSound.src = FLAP_SOUND_URL;
+    gameMusic.src = BACKGROUND_MUSIC_URL;
+    gameOverSound.src = GAME_OVER_MUSIC_URL;
+    
+    
+    // --- GAME STATE & CONSTANTS ---
+    const player = { x: 50, y: 150, width: 60, height: 60, velocity: 0 };
+    const gravity = 0.25;
+    const flapStrength = 4.6;
+    const pipeWidth = 80; // Width of the enemy image
+    const pipeGap = 150;  // Gap to fly through
+    
+    let pipes, score, isGameOver, gameLoopId;
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // --- NEW AUDIO FUNCTIONS ---
+    function playFlapSound() {
+      flapSound.currentTime = 0; // Rewind to start
+      flapSound.play().catch(e => console.warn("Flap sound failed to play:", e));
+    }
+
+    function playGameMusic() {
+      gameOverSound.pause(); // Stop game over music if playing
+      gameMusic.currentTime = 0;
+      gameMusic.play().catch(e => console.warn("Game music failed to play:", e));
+    }
+    
+    function playGameOverMusic() {
+      gameMusic.pause(); // Stop main music
+      gameOverSound.currentTime = 0;
+      gameOverSound.play().catch(e => console.warn("Game over sound failed to play:", e));
+    }
+    
+    // --- GAME LOGIC ---
+
+    function resetGame() {
+      player.y = 150;
+      player.velocity = 0;
+      pipes = [];
+      score = 0;
+      isGameOver = false;
+      gameOverOverlay.style.display = 'none'; 
+      draw(); 
+    }
+
+    function draw() {
+      // Draw the black background
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw pipes (enemies)
+      pipes.forEach(pipe => {
+        // Draw top pipe (inverted enemy)
+        ctx.save();
+        ctx.translate(pipe.x + pipeWidth / 2, pipe.topHeight / 2);
+        ctx.rotate(Math.PI); // Rotate 180 degrees
+        ctx.drawImage(enemyImage, -pipeWidth / 2, -pipe.topHeight / 2, pipeWidth, pipe.topHeight);
+        ctx.restore();
+        
+        // Draw bottom pipe (normal enemy)
+        let bottomPipeY = pipe.topHeight + pipeGap;
+        let bottomPipeHeight = canvas.height - bottomPipeY;
+        ctx.drawImage(enemyImage, pipe.x, bottomPipeY, pipeWidth, bottomPipeHeight);
+      });
+      
+      // Draw player (friend)
+      ctx.drawImage(friendImage, player.x, player.y, player.width, player.height);
+
+      // Draw score
+      ctx.fillStyle = 'white';
+      ctx.font = '30px Segoe UI, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(score, canvas.width / 2, 50);
+    }
+
+    function gameLoop() {
+      if (isGameOver) return;
+      // 1. UPDATE game state
+      player.velocity += gravity;
+      player.y += player.velocity;
+      
+      if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
+        const topHeight = Math.random() * (canvas.height - pipeGap - 100) + 50;
+        pipes.push({ x: canvas.width, topHeight: topHeight, passed: false });
+      }
+      pipes.forEach(pipe => pipe.x -= 2); // Pipe speed
+      pipes = pipes.filter(pipe => pipe.x + pipeWidth > 0);
+
+      // 2. CHECK for collisions & scoring
+      const playerHitsGroundOrSky = player.y + player.height > canvas.height || player.y < 0;
+      let playerHitsPipe = false;
+      pipes.forEach(pipe => {
+        if (player.x < pipe.x + pipeWidth && player.x + player.width > pipe.x &&
+           (player.y < pipe.topHeight || player.y + player.height > pipe.topHeight + pipeGap)) {
+          playerHitsPipe = true;
+        }
+        if (!pipe.passed && player.x > pipe.x + pipeWidth) {
+          score++;
+          pipe.passed = true;
+        }
+      });
+      if (playerHitsGroundOrSky || playerHitsPipe) {
+        gameOver();
+      }
+
+      // 3. DRAW everything
+      draw();
+
+      // 4. REQUEST the next frame
+      requestAnimationFrame(gameLoop);
+    }
+
+    function flap() {
+      if (!isGameOver) {
+        player.velocity = -flapStrength;
+        playFlapSound();
+      }
+    }
+    
+    async function submitScore() {
+      try {
+        const response = await fetch('/games/submit-score/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+          // Submit score for this new game
+          body: JSON.stringify({ game: 'Flappy Roast (Politics Version)', score: score })
+        });
+        const result = await response.json();
+        console.log('Score submission result:', result);
+      } catch (error) {
+        console.error('Error submitting score:', error);
+      }
+    }
+
+    function gameOver() {
+      isGameOver = true;
+      finalScoreDisplay.textContent = score;
+      gameOverImage.src = GAME_OVER_IMAGE_URL; // Set the roast image
+      gameOverOverlay.style.display = 'flex';
+      playGameOverMusic(); // Play the fail sound
+      submitScore();
+    }
+
+    function startCountdown() {
+      // This is critical for browsers: audio must start after a user click
+      try {
+        flapSound.load();
+        gameMusic.load();
+        gameOverSound.load();
+      } catch (e) {
+        console.warn("Could not pre-load audio, will play on demand.");
+      }
+      
+      startOverlay.style.display = 'flex';
+      let count = 3;
+      startContent.innerHTML = `<div class="countdown-text">${count}</div>`;
+      const countdownInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          startContent.innerHTML = `<div class="countdown-text">${count}</div>`;
+        } else if (count === 0) {
+          startContent.innerHTML = `<div class="countdown-text">Go!</div>`;
+        } else {
+          clearInterval(countdownInterval);
+          startOverlay.style.display = 'none';
+          playGameMusic(); // Start the music
+          gameLoop(); // Start the animation loop
+        }
+      }, 1000);
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        gameArea.requestFullscreen().catch(err => { console.warn(`Error: ${err.message}`); });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // --- MAIN INITIALIZATION ---
+    function init() {
+      startButton.addEventListener('click', startCountdown);
+      playAgainButton.addEventListener('click', () => {
+        resetGame();
+        startCountdown();
+      });
+      document.addEventListener('keydown', e => { if (e.code === 'Space') flap(); });
+      canvas.addEventListener('click', flap);
+      fullscreenIcon.addEventListener('click', toggleFullScreen);
+      resetGame(); 
+    }
+    
+    init();
+  });
+</script>
+{% endblock %}

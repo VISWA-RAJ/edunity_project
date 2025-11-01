@@ -1,5 +1,5 @@
 # games/views.py
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -8,6 +8,8 @@ from .models import GameScore
 from core.models import Profile
 from django.contrib.auth.models import User
 from django.db.models import Sum # We need this for calculations
+# --- NEW: Import for the shop redirect ---
+from django.urls import reverse
 
 # --- NEW, CORRECT HELPER FUNCTION ---
 def get_game_leaderboard():
@@ -34,10 +36,20 @@ def get_game_leaderboard():
 def games_home_view(request):
     """
     Displays the main games page and the total score leaderboard.
+    Also checks which premium games the user owns.
     """
     leaderboard = get_game_leaderboard()
+    
+    # Check the user's inventory
+    user_inventory = []
+    if request.user.is_authenticated:
+        # Get the IDs of all purchased items from the profile
+        user_inventory_ids = request.user.profile.purchased_items.values_list('unique_id', flat=True)
+        user_inventory = list(user_inventory_ids)
+        
     context = {
-        'leaderboard': leaderboard
+        'leaderboard': leaderboard,
+        'user_inventory_ids': user_inventory # Pass the list of IDs to the template
     }
     return render(request, 'games/games.html', context)
 
@@ -138,3 +150,30 @@ def coin_collector_view(request):
         'top_collector_scores': top_collector_scores
     }
     return render(request, 'games/coin_collector.html', context)
+
+# --- THIS IS THE NEW VIEW FOR THE EXCLUSIVE GAME ---
+@login_required
+def flappy_roast_view(request):
+    """
+    Serves the page for the exclusive "Flappy Roast" game.
+    This view is locked and checks the user's inventory.
+    """
+    # --- THIS IS THE FIX ---
+    # We now check for the correct unique_id
+    item_unique_id = 'flappy-roast-politics-version' 
+    if not request.user.profile.purchased_items.filter(unique_id=item_unique_id).exists():
+        # If they don't own it, send them to the shop
+        return redirect('shop')
+
+    # If they DO own it, get the game's leaderboard and render the page
+    
+    top_scores = GameScore.objects.filter(
+        game_name='Flappy Roast (Politics Version)'
+    ).order_by('-score')[:3]
+    
+    context = {
+        'top_scores': top_scores
+    }
+    
+    return render(request, 'games/flappy_roast.html', context)
+

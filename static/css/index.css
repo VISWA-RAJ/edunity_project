@@ -3560,3 +3560,95 @@ footer-info p {
 .notification-footer:hover {
   background-color: rgba(0, 255, 208, 0.15);
 }
+
+/* ... (all your existing CSS from index.css) ... */
+
+/* --- NEW STYLE FOR TOKEN DISPLAY --- */
+.profile-tokens {
+  font-size: 1.1rem;
+  color: #f1c40f; /* A gold color for the tokens */
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+
+/* ... (all your existing CSS from index.css) ... */
+
+/* --- NEW STYLE FOR TOKEN DISPLAY (re-using from profile) --- */
+.token-display {
+  font-size: 1.5rem; /* Make it a bit larger */
+  color: #f1c40f; /* A gold color for the tokens */
+  font-weight: bold;
+}
+
+.shop-balance-container {
+  text-align: center;
+  margin: -20px auto 30px auto;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  max-width: 400px;
+  border-radius: 12px;
+  border-top: 1px solid rgba(255, 215, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+
+/* --- NEW SHOP CARD STYLES --- */
+.shop-card {
+  /* Make the card taller and use flex to push button to bottom */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.shop-card p {
+  flex-grow: 1; /* This makes the description take up available space */
+}
+
+.shop-footer {
+  margin-top: auto; /* This pushes the footer to the bottom */
+  padding-top: 15px;
+  border-top: 1px solid rgba(0, 255, 208, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.shop-price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #f1c40f; /* Gold token color */
+}
+
+/* --- SHOP BUTTON STYLES --- */
+
+/* Base style for all shop buttons */
+.shop-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* The main "Buy Now" button */
+.shop-btn.buy-btn {
+  /* It already has .auth-button, so it's styled bright teal */
+  transition: background-color 0.3s;
+}
+
+/* "Owned" button */
+.shop-btn.owned {
+  background-color: #555;
+  color: #aaa;
+  cursor: default;
+}
+
+/* "Not Enough Tokens" button */
+.shop-btn.disabled {
+  background-color: #333;
+  color: #777;
+  cursor: not-allowed;
+}

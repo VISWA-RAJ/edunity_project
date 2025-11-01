@@ -11,4 +11,8 @@ urlpatterns = [
     path('collector/', views.coin_collector_view, name='coin_collector'),
 
     path('submit-score/', views.submit_score_view, name='submit_score'),
+    
+    # --- THIS IS THE NEW, UPDATED URL FOR THE EXCLUSIVE GAME ---
+    path('flappy-roast-politics/', views.flappy_roast_view, name='flappy_roast_politics'),
 ]
+

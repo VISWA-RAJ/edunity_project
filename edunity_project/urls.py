@@ -17,6 +17,9 @@ urlpatterns = [
     path('games/', include('games.urls')),
     path('leaderboard/', include('leaderboard.urls')),
     
+    # --- ADD THE NEW SHOP URLS ---
+    path('shop/', include('shop.urls')),
+    
     # Core URLs (must be last)
     path('', include('core.urls')),
 ]

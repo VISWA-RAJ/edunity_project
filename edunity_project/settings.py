@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     'memes',
     'games',
     'leaderboard',
+    
+    # --- ADD THE NEW SHOP APP ---
+    'shop',
 ]
 
 MIDDLEWARE = [

@@ -28,6 +28,7 @@
           <a href="{% url 'memes' %}">Memes</a>
           <a href="{% url 'games' %}">Games</a>
           <a href="{% url 'leaderboard' %}">Leaderboard</a>
+          <a href="{% url 'shop' %}">Shop</a> {# --- NEW SHOP LINK --- #}
           <a href="{% url 'about_us' %}">About</a>
           
           {# --- THIS IS THE MODIFIED NOTIFICATION/PROFILE LINK --- #}
@@ -67,7 +68,7 @@
                 {% endif %}
               </div>
               <a href="{% url 'my_profile' %}" class="notification-footer">
-                View Full Profile
+                View All Notifications
               </a>
             </div>
           </div>

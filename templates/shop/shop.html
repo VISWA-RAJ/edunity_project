@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Edunity Shop{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>🛒 Edunity Shop</h1>
+    <p>Spend your Edunity Tokens on exclusive items and features!</p>
+  </section>
+
+  {# Display any success/error messages #}
+  {% if messages %}
+    <div class="messages-container" style="max-width: 1200px; margin: 20px auto -20px auto;">
+      {% for message in messages %}
+        <p class="message {{ message.tags }}">{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {# Display the user's current token balance #}
+  <div class="shop-balance-container">
+    <span class="token-display">Your Balance: {{ user_tokens }} 🪙</span>
+  </div>
+
+  <section class="modules">
+    <div class="card-grid">
+      {% for item in all_items %}
+        <div class="card shop-card">
+          <h3>{{ item.name }}</h3>
+          <p>{{ item.description }}</p>
+          
+          <div class="shop-footer">
+            <span class="shop-price">{{ item.price }} Tokens 🪙</span>
+            
+            {# --- Dynamic Buy Button Logic --- #}
+            {% if item.id in user_inventory_ids %}
+              <button class="shop-btn owned" disabled>Owned</button>
+            {% elif user_tokens < item.price %}
+              <button class="shop-btn disabled" disabled>Not Enough Tokens</button>
+            {% else %}
+              <form action="{% url 'buy_item' item.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="shop-btn buy-btn auth-button">Buy Now</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p style="color: #ccc;">The shop is currently empty. Check back soon!</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}
