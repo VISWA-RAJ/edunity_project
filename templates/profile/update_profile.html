@@ -14,8 +14,28 @@
     {% endif %}
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="form-field">{{ form.bio.label_tag }}{{ form.bio }}</div>
-      <div class="form-field">{{ form.image.label_tag }}{{ form.image }}</div>
+      
+      <div class="form-field">
+        {{ form.bio.label_tag }}
+        {{ form.bio }}
+      </div>
+
+      <div class="form-field">
+        {{ form.image.label_tag }}
+        
+        {# This is the standard file input #}
+        {{ form.image }}
+        
+        {# This checks if the image field has a "clear" option #}
+        {% if form.image.field.widget.template_name == 'django/forms/widgets/clearable_file_input.html' %}
+          <div class="clearable-file-input">
+            <label for="{{ form.image.clear_checkbox_id }}">
+              {{ form.image.clear_checkbox_label }}
+            </label>
+            {{ form.image.clear }}
+          </div>
+        {% endif %}
+      </div>
       <button type="submit" class="auth-button">Save Changes</button>
     </form>
   </div>

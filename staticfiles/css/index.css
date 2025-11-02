@@ -3649,3 +3649,325 @@ footer-info p {
   color: #777;
   cursor: not-allowed;
 }
+
+/* ==========================================================================
+   NEW PROFILE PAGE RE-DESIGN STYLES
+   ========================================================================== */
+
+/* --- New Sidebar Stats --- */
+.profile-stats {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 15px 10px;
+  margin: 20px 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.stat-item span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.stat-item span[style*="#f1c40f"] { /* Target token span */
+  color: #f1c40f;
+}
+
+/* --- Sidebar Point Exchange Form --- */
+.sidebar-exchange-form {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.sidebar-exchange-form h4 {
+  color: #00ffd0;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.sidebar-exchange-form p {
+  font-size: 0.8rem;
+  color: #aaa;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.sidebar-exchange-form input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  box-sizing: border-box; 
+  margin-bottom: 10px;
+}
+
+.sidebar-exchange-form .auth-button {
+  width: 100%;
+  padding: 12px;
+}
+
+/* --- Main Content Tab System --- */
+.profile-main {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-tabs {
+  display: flex;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 25px;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 15px 25px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.tab-button:hover {
+  color: #fff;
+}
+
+.tab-button.active {
+  color: #00ffd0;
+  font-weight: bold;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; /* Sits on top of the container's border */
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #00ffd0;
+}
+
+.tab-badge {
+  background-color: #ff4b4b;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.tab-panel {
+  display: none; /* Hide all panels by default */
+}
+
+.tab-panel.active {
+  display: block; /* Show the active panel */
+}
+
+/* --- General Cleanup --- */
+.profile-main .bio-section,
+.profile-main .friend-requests-section,
+.profile-main .friends-section {
+  margin-bottom: 0; /* Remove margins since they are in tabs */
+}
+
+/* Hide old stacked point/token text */
+.profile-sidebar .profile-points,
+.profile-sidebar .profile-tokens {
+  display: none;
+}
+
+
+/* ==========================================================================
+   NEW HEADER SHOP CART STYLES
+   ========================================================================== */
+
+/* 1. Wrapper for desktop cart + hamburger */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between cart and hamburger */
+}
+
+/* 2. The round shop cart button for desktop */
+.header-shop-cart {
+  display: block; /* Visible by default on desktop */
+  background-color: rgba(0, 255, 208, 0.1);
+  border: 1px solid rgba(0, 255, 208, 0.3);
+  color: #00ffd0;
+  text-decoration: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem; /* Makes the cart icon bigger */
+  transition: all 0.2s ease-in-out;
+}
+
+.header-shop-cart:hover {
+  background-color: #00ffd0;
+  color: #000;
+  transform: scale(1.1);
+}
+
+/* 3. The "Shop" link inside the mobile menu */
+.nav-shop-link-mobile {
+  display: none; /* Hide it on desktop */
+}
+
+
+/* ==========================================================================
+   MOBILE RESPONSIVE UPDATES for Shop Cart
+   ========================================================================== */
+
+@media (max-width: 900px) {
+
+  /* 1. Hide the round desktop cart button on mobile */
+  .header-shop-cart {
+    display: none;
+  }
+
+  /* 2. Show the "Shop" link when the mobile menu is active */
+  #main-nav.active .nav-shop-link-mobile {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fff;
+    margin: 10px 0;
+  }
+}
+
+/* 3. Adjust mobile font size for the new link */
+@media (max-width: 480px) {
+  #main-nav.active .nav-shop-link-mobile {
+    font-size: 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   LANDING PAGE NAVIGATION STYLES
+   ========================================================================== */
+            
+.landing-nav {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.landing-nav-link {
+  text-decoration: none;
+  color: #cccccc;
+  font-weight: 500;
+  padding: 8px 12px;
+  transition: color 0.3s;
+}
+
+.landing-nav-link:hover {
+  color: #fff;
+}
+
+/* Re-use the auth-button style but make it smaller */
+.landing-nav-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #00ffd0;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.landing-nav-button:hover {
+  background-color: #00c0a0;
+}
+
+/* On mobile, hide this new nav (since login/signup is in the hero) */
+@media (max-width: 900px) {
+  .landing-nav {
+    display: none;
+  }
+}
+
+
+/* ==========================================================================
+   NEW PROFILE LOGOUT BUTTON
+   ========================================================================== */
+
+.logout-button-profile {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: rgba(255, 75, 75, 0.1); /* Red, glassy background */
+  color: #ff4b4b; /* Red text */
+  border: 1px solid #ff4b4b; /* Red border */
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.logout-button-profile:hover {
+  background-color: #ff4b4b; /* Solid red on hover */
+  color: #fff; /* White text on hover */
+  border-color: #ff4b4b;
+}
+
+/* ==========================================================================
+   PROFILE PICTURE "CLEAR" CHECKBOX STYLE
+   ========================================================================== */
+
+.clearable-file-input {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-top: 15px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.clearable-file-input label {
+  color: #ccc;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.clearable-file-input input[type="checkbox"] {
+  /* Style the checkbox to match your theme */
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  accent-color: #00ffd0; /* Makes the checkmark teal */
+  vertical-align: middle;
+  cursor: pointer;
+}

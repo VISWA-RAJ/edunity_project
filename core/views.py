@@ -142,6 +142,12 @@ def user_list_view(request):
 
 @login_required
 def view_user_profile_view(request, username):
+    
+    if request.user.username == username:
+        return redirect('my_profile')
+    
+    
+    
     user = get_object_or_404(User, username=username)
     profile = user.profile
     is_friend = request.user.profile.friends.filter(id=profile.id).exists()

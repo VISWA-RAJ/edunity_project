@@ -1,26 +1,50 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Welcome to Edunity{% endblock %}
+
+{# --- THIS NEW BLOCK OVERRIDES THE DEFAULT NAVBAR --- #}
+{% block navigation %}
+<div class="landing-nav">
+  <a href="{% url 'about_us' %}" class="landing-nav-link">About</a>
+  <a href="{% url 'login' %}" class="landing-nav-link">Login</a>
+  <a href="{% url 'signup' %}" class="landing-nav-button">Sign Up</a>
+</div>
+{% endblock navigation %}
+
 
 {% block content %}
   <section class="hero">
-    <h1>Welcome to Edunity</h1>
-    <p>One Platform. Every Campus Need.</p>
+    <h1>One Platform. Every Campus Need.</h1>
+    <p>Join the ultimate community platform to share notes, find items, discuss doubts, and earn rewards.</p>
     <div class="buttons">
-      <a href="{% url 'signup' %}" style="background-color: #00ffd0; color: #000;">Get Started</a>
-      <a href="{% url 'login' %}">Login</a>
+      <a href="{% url 'signup' %}" class="auth-button" style="width: 200px; margin-bottom: 0;">Get Started Now</a>
     </div>
   </section>
 
   <section class="modules" id="modules">
     <h2 style="color: #ffffff;">A Glimpse of Our Features</h2>
     <p style="color: #cccccc; margin-bottom: 40px;">Create an account to access all features.</p>
-    <div class="card-grid">
-        {# --- THESE ARE THE 4 MODIFIED LINES --- #}
-        {# We've replaced the 'div' tags with 'a' tags pointing to the login page #}
-        <a href="{% url 'login' %}" class="card" style="opacity: 0.7;"><h3>📘 Study Materials</h3><p>Share and access study resources.</p></a>
-        <a href="{% url 'login' %}" class="card" style="opacity: 0.7;"><h3>🎒 Lost & Found</h3><p>Report and find lost items easily.</p></a>
-        <a href="{% url 'login' %}" class="card" style="opacity: 0.7;"><h3>💬 Forum</h3><p>Discuss doubts and topics with peers.</p></a>
-        <a href="{% url 'login' %}" class="card" style="opacity: 0.7;"><h3>📊 Polling</h3><p>Engage with live campus polls.</p></a>
+    
+    {# --- FIX: Links to login & new 2x4 grid style --- #}
+    <div class="card-grid" style="max-width: 1200px; grid-template-columns: repeat(4, 1fr);">
+      <a href="{% url 'login' %}" class="card" style="opacity: 0.8;"><h3>📘 Study Materials</h3><p>Share and access study resources.</p></a>
+      <a href="{% url 'login' %}" class="card" style="opacity: 0.8;"><h3>🎒 Lost & Found</h3><p>Report and find lost items easily.</p></a>
+      <a href="{% url 'login' %}" class="card" style="opacity: 0.8;"><h3>💬 Forum</h3><p>Discuss doubts and topics with peers.</p></a>
+      <a href="{% url 'login' %}" class="card" style="opacity: 0.8;"><h3>📊 Polling</h3><p>Engage with live campus polls.</p></a>
+      <a href="{% url 'login' %}" class="card" style="opacity: 0.8;"><h3>📢 Notices</h3><p>Stay updated with latest announcements.</p></a>
+      <a href="{% url 'login' %}" class="card" style="opacity: 0.8;"><h3>📸 Memes</h3><p>Share memes and videos with friends.</p></a>
+      <a href="{% url 'login' %}" class="card" style="opacity: 0.8;"><h3>🎮 Mini Games</h3><p>Play fun campus mini-games.</p></a>
+      <a href="{% url 'login' %}" class="card" style="opacity: 0.8;"><h3>🏆 Leaderboard</h3><p>See the top contributors on campus.</p></a>
+    </div>
+  </section>
+
+     
+
+  <section class="hero" style="padding: 80px 20px; background-color: rgba(0, 0, 0, 0.4);">
+    <h2 style="font-size: 2.5rem; color: #fff;">Ready to Join?</h2>
+    <p style="font-size: 1.2rem; color: #ccc; margin-bottom: 30px;">Create your free account today and become part of the community.</p>
+    <div class="buttons">
+      <a href="{% url 'signup' %}" class="auth-button" style="width: 220px; margin-bottom: 0; padding: 14px; font-size: 1.1rem;">Create Your Account</a>
     </div>
   </section>
 {% endblock %}

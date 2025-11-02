@@ -2,120 +2,137 @@
 {% block title %}{{ profile.user.username }}'s Profile{% endblock %}
 
 {% block content %}
-  {# --- ADD THIS SNIPPET TO DISPLAY MESSAGES (for success/errors) --- #}
-  {% if messages %}
-    <div class="messages-container" style="max-width: 1100px; margin: 20px auto -20px auto;">
-      {% for message in messages %}
-        <p class="message {{ message.tags }}">{{ message }}</p>
-      {% endfor %}
-    </div>
-  {% endif %}
-
   <div class="profile-container">
+
     <aside class="profile-sidebar">
       <img src="{{ profile.image_url }}" alt="{{ profile.user.username }}'s Profile Picture" class="profile-picture">
+      
       <div class="profile-info">
         <h1 class="profile-username">{{ profile.user.username }}</h1>
         <p class="profile-email">{{ profile.user.email }}</p>
         <div class="profile-rank">{{ rank }}</div>
-        
-        {# --- UPDATED TO SHOW BOTH POINTS AND TOKENS --- #}
-        <div class="profile-points">{{ profile.points }} Points</div>
-        <div class="profile-tokens">{{ profile.tokens }} Tokens 🪙</div> 
-        
-        <div class="profile-main-rank">
       </div>
-      <a href="{% url 'update_profile' %}" class="edit-profile-btn">Edit Your Profile</a>
+
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span>{{ profile.points }}</span>
+          Points
+        </div>
+        <div class="stat-item">
+          <span>{{ profile.tokens }} 🪙</span>
+          Tokens
+        </div>
+      </div>
+      
+      <a href="{% url 'update_profile' %}" class="edit-profile-btn">Edit Profile</a>
+      <form action="{% url 'logout' %}" method="post" style="margin-top: 15px;">
+  {% csrf_token %}
+  <button type="submit" class="logout-button-profile">Logout</button>
+</form>
+
+      <div class="sidebar-exchange-form">
+        <h4>🏦 Point Exchange</h4>
+        <p>10 Points = 1 Token</p>
+        <form action="{% url 'convert_points' %}" method="post">
+          {% csrf_token %}
+          {{ conversion_form.points_to_convert }}
+          <button type="submit" class="auth-button">Convert</button>
+        </form>
+      </div>
     </aside>
 
     <main class="profile-main">
-      <div class="bio-section">
-        <h2>About Me</h2>
-        <p>{{ profile.bio|default:"No bio yet."|linebreaksbr }}</p>
-      </div>
       
-      {# --- NEW "POINT EXCHANGE" SECTION --- #}
-      <div class="bio-section" style="margin-top: 30px;">
-        <h2>🏦 Point Exchange</h2>
-        <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 20px;">
-          Convert your hard-earned points into Edunity Tokens.
-          <br>
-          Rate: <strong>10 Points = 1 Token 🪙</strong>
-        </p>
-        
-        <form action="{% url 'convert_points' %}" method="post" class="notice-form-container" style="padding: 0; background: none; border: none; backdrop-filter: none; max-width: 100%;">
-          {% csrf_token %}
-          <div class="form-field">
-            {{ conversion_form.points_to_convert.label_tag }}
-            {{ conversion_form.points_to_convert }}
-            {% if conversion_form.points_to_convert.help_text %}
-              <div classs="helptext" style="font-size: 0.8rem; color: #aaa; margin-top: 5px;">{{ conversion_form.points_to_convert.help_text }}</div>
-            {% endif %}
-          </div>
-          <button type="submit" class="auth-button" style="margin-top: 10px;">Convert Points</button>
-        </form>
-      </div>
-      
-      {# --- NOTIFICATION SECTION (UNCHANGED, BUT WITH FIXES) --- #}
-      <div class="friend-requests-section">
-        <div class="notification-header">
-          <h2>Notifications</h2>
-          {% if friend_requests or notifications %}
-            <form action="{% url 'clear_all_notifications' %}" method="post">
-              {% csrf_token %}
-              <button type="submit" class="mark-all-read-btn">Clear All</button>
-            </form>
-          {% endif %}
-        </div>
-        
-        {% for request in friend_requests %}
-          <div class="friend-request-card">
-            <a href="{% url 'view_user_profile' request.from_user.username %}" class="request-info">
-              <img src="{{ request.from_user.profile.image_url }}" alt="{{ request.from_user.username }}">
-              <span><strong>{{ request.from_user.username }}</strong> sent you a friend request.</span>
-            </a>
-            <div class="request-actions">
-              <form action="{% url 'accept_friend_request' request.id %}" method="post" style="display: inline;"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button type="submit" class="friend-btn add-friend">Accept</button></form>
-              <form action="{% url 'decline_friend_request' request.id %}" method="post" style="display: inline;"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button type="submit" class="friend-btn remove-friend">Decline</button></form>
-            </div>
-          </div>
-        {% endfor %}
-        {% for notification in notifications %}
-          <div class="notification-card">
-            <a href="{{ notification.link|default:'#' }}" class="request-info" style="text-decoration: none;">
-              {% if notification.sender %}
-                <img src="{{ notification.sender.profile.image_url }}" alt="{{ notification.sender.username }}">
-              {% endif %}
-              <span>{{ notification.message }}</span>
-            </a>
-            <div class="request-actions">
-              <form action="{% url 'dismiss_notification' notification.id %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="dismiss-btn">×</button>
-              </form>
-            </div>
-          </div>
-        {% endfor %}
-        {% if not friend_requests and not notifications %}
-          <p style="color: #ccc;">You have no new notifications.</p>
-        {% endif %}
-      </div>
-
-      {# --- FRIENDS SECTION (UNCHANGED, BUT WITH FIXES) --- #}
-      <div class="friends-section">
-        <h2>Friends ({{ friends.count }})</h2>
-        <div class="friends-list">
-          {% for friend_profile in friends %}
-            <a href="{% url 'view_user_profile' friend_profile.user.username %}" class="friend-card">
-              <img src="{{ friend_profile.image_url }}" alt="{{ friend_profile.user.username }}">
-              <span>{{ friend_profile.user.username }}</span>
-            </a>
-          {% empty %}
-            <p style="color: #ccc;">You haven't added any friends yet.</p>
+      {# Display any success/error messages #}
+      {% if messages %}
+        <div class="messages-container" style="margin: 0 0 20px 0; max-width: 100%;">
+          {% for message in messages %}
+            <p class="message {{ message.tags }}">{{ message }}</p>
           {% endfor %}
         </div>
-        <a href="{% url 'user_list' %}" class="find-friends-btn">Find Friends</a>
+      {% endif %}
+
+      <div class="profile-tabs">
+        <button class="tab-button active" data-tab="about">About Me</button>
+        <button class="tab-button" data-tab="notifications">
+          Notifications 
+          {% if friend_requests.count > 0 or notifications.count > 0 %}
+            <span class="tab-badge">{{ friend_requests.count|add:notifications.count }}</span>
+          {% endif %}
+        </button>
+        <button class="tab-button" data-tab="friends">Friends ({{ friends.count }})</button>
       </div>
+
+      <div class="tab-panel active" id="tab-about">
+        <div class="bio-section">
+          <h2>About Me</h2>
+          <p>{{ profile.bio|default:"No bio yet."|linebreaksbr }}</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-notifications">
+        <div class="friend-requests-section" style="margin: 0; padding: 0; background: none; border: none;">
+          <div class="notification-header" style="padding: 0 0 20px 0;">
+            <h2>Notifications</h2>
+            {% if friend_requests or notifications %}
+              <form action="{% url 'clear_all_notifications' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="mark-all-read-btn">Clear All</button>
+              </form>
+            {% endif %}
+          </div>
+          
+          {% for request in friend_requests %}
+            <div class="friend-request-card">
+              <a href="{% url 'view_user_profile' request.from_user.username %}" class="request-info">
+                <img src="{{ request.from_user.profile.image_url }}" alt="{{ request.from_user.username }}">
+                <span><strong>{{ request.from_user.username }}</strong> sent you a friend request.</span>
+              </a>
+              <div class="request-actions">
+                <form action="{% url 'accept_friend_request' request.id %}" method="post" style="display: inline;"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button type="submit" class="friend-btn add-friend">Accept</button></form>
+                <form action="{% url 'decline_friend_request' request.id %}" method="post" style="display: inline;"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button type="submit" class="friend-btn remove-friend">Decline</button></form>
+              </div>
+            </div>
+          {% endfor %}
+          {% for notification in notifications %}
+            <div class="notification-card">
+              <a href="{{ notification.link|default:'#' }}" class="request-info" style="text-decoration: none;">
+                {% if notification.sender %}
+                  <img src="{{ notification.sender.profile.image_url }}" alt="{{ notification.sender.username }}">
+                {% endif %}
+                <span>{{ notification.message }}</span>
+              </a>
+              <div class="request-actions">
+                <form action="{% url 'dismiss_notification' notification.id %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="dismiss-btn">×</button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+          {% if not friend_requests and not notifications %}
+            <p style="color: #ccc;">You have no new notifications.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-friends">
+        <div class="friends-section" style="margin: 0; padding: 0; background: none; border: none;">
+          <a href="{% url 'user_list' %}" class="find-friends-btn" style="float: right; margin-top: 0;">Find Friends</a>
+          <h2>Friends ({{ friends.count }})</h2>
+          <div class="friends-list" style="margin-top: 20px;">
+            {% for friend_profile in friends %}
+              <a href="{% url 'view_user_profile' friend_profile.user.username %}" class="friend-card">
+                <img src="{{ friend_profile.image_url }}" alt="{{ friend_profile.user.username }}">
+                <span>{{ friend_profile.user.username }}</span>
+              </a>
+            {% empty %}
+              <p style="color: #ccc;">You haven't added any friends yet.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      
     </main>
   </div>
 {% endblock %}
