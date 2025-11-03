@@ -14,5 +14,7 @@ urlpatterns = [
     
     # --- THIS IS THE NEW, UPDATED URL FOR THE EXCLUSIVE GAME ---
     path('flappy-roast-politics/', views.flappy_roast_view, name='flappy_roast_politics'),
+
+    
 ]
 

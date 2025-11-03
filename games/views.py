@@ -177,3 +177,6 @@ def flappy_roast_view(request):
     
     return render(request, 'games/flappy_roast.html', context)
 
+
+
+

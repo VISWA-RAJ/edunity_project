@@ -61,15 +61,28 @@
 {# --- MODIFIED LOCKED GAME CARD --- #}
 {# The entire div is now inside the if statement. #}
 {# It will only appear if the user has purchased the item. #}
-{% if "flappy-roast-politics-version" in user_inventory_ids %}
-  <div class="game-card">
-    <h3>👾 Flappy Roast (Politics Version)</h3>
-    <p>An exclusive game, available in the shop!</p>
-    <a href="{% url 'flappy_roast_politics' %}">Play Now</a>
-  </div>
-{% endif %}
+
 {# --- END OF MODIFIED BLOCK --- #}
+    {# --- Flappy Roast Card --- #}
+    {% if "flappy-roast-politics-version" in user_inventory_ids %}
+      <div class="game-card">
+        <h3>👾 Flappy Roast (Politics Version)</h3>
+        <p>An exclusive game, available in the shop!</p>
+        <a href="{% url 'flappy_roast_politics' %}">Play Now</a>
+      </div>
+    {% endif %}
+
+
+    {# --- ADD THIS NEW CARD --- #}
+{# --- ADD THIS NEW CARD FOR PAC-MAN --- #}
+    {% if "premium-game-roast-pacman" in user_inventory_ids %}
+      <div class="game-card">
+        <h3>👾 Roast Pac-Man</h3>
+        <p>A premium Pac-Man roast. Eat the dots, avoid the ghosts!</p>
+        <a href="{% url 'roast_pacman' %}">Play Now</a>
+      </div>
+    {% endif %}
+    {# --- END OF NEW BLOCK --- #}
 
   </section>
 {% endblock %}
-
