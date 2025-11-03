@@ -195,6 +195,15 @@ def send_friend_request_view(request, username):
         to_user = get_object_or_404(User, username=username)
         if not FriendRequest.objects.filter(from_user=request.user, to_user=to_user).exists() and not FriendRequest.objects.filter(from_user=to_user, to_user=request.user).exists():
             FriendRequest.objects.create(from_user=request.user, to_user=to_user)
+            
+            # --- ADD NOTIFICATION (THE FIX) ---
+            Notification.objects.create(
+                recipient=to_user, 
+                sender=request.user, 
+                message=f"{request.user.username} sent you a friend request."
+            )
+            # --- END NOTIFICATION ---
+            
     return redirect('view_user_profile', username=username)
 
 @login_required
@@ -205,6 +214,15 @@ def accept_friend_request_view(request, request_id):
         to_user_profile = request.user.profile
         to_user_profile.friends.add(from_user_profile)
         from_user_profile.friends.add(to_user_profile)
+        
+        # --- ADD NOTIFICATION (THE FIX) ---
+        Notification.objects.create(
+            recipient=friend_request.from_user, 
+            sender=request.user, 
+            message=f"{request.user.username} accepted your friend request."
+        )
+        # --- END NOTIFICATION ---
+        
         friend_request.delete()
     return redirect('my_profile')
 

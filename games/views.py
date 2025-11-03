@@ -64,7 +64,7 @@ def snake_game_view(request):
     return render(request, 'games/snake_game.html', context)
 
 # --- THE NEW, CORRECTED "BRAIN" OF THE GAME MODULE ---
-@csrf_exempt
+
 @login_required
 def submit_score_view(request):
     if request.method == 'POST':

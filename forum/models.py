@@ -42,7 +42,13 @@ class Reply(models.Model):
     class Meta:
         ordering = ['created_at']
 
-# ... (your existing gamification signals are here) ...
+
+# --- GAMIFICATION LOGIC FOR THE FORUM ---
+
+# --- 1. IMPORT THE M2M_CHANGED SIGNAL ---
+from django.db.models.signals import post_save, m2m_changed
+from django.dispatch import receiver
+from core.models import Profile # Import the Profile model to add points
 
 # --- NEW GAMIFICATION LOGIC FOR UPVOTES ---
 def user_upvoted_reply(sender, instance, action, pk_set, **kwargs):
@@ -50,16 +56,22 @@ def user_upvoted_reply(sender, instance, action, pk_set, **kwargs):
     Awards +1 point to the reply author when their reply is upvoted.
     """
     if action == 'post_add': # Fires after a user is added to the 'upvotes' list
-        # We don't need to do anything with the user who voted, just the author
         reply_author_profile = instance.author.profile
-        reply_author_profile.points += 1
-        reply_author_profile.save()
+
+        # --- 2. ADD THIS FIX to prevent self-voting for points ---
+        # pk_set contains the ID of the user who was just added.
+        user_who_voted_id = list(pk_set)[0]
+        
+        # Only award points if the voter is NOT the author
+        if reply_author_profile.user.id != user_who_voted_id:
+            reply_author_profile.points += 1
+            reply_author_profile.save()
 
 
-# --- GAMIFICATION LOGIC FOR THE FORUM ---
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from core.models import Profile # Import the Profile model to add points
+# --- 3. CONNECT THE SIGNAL (This is the main fix) ---
+# This line "wires up" the function to the upvotes field.
+m2m_changed.connect(user_upvoted_reply, sender=Reply.upvotes.through)
+
 
 @receiver(post_save, sender=Doubt)
 def award_points_for_doubt(sender, instance, created, **kwargs):

@@ -18,13 +18,13 @@ def leaderboard_home_view(request):
     current_user_rank = None
     current_user_profile = request.user.profile
     
-    # Convert the queryset to a list to find the index (rank)
-    profile_list = list(all_profiles)
+    # --- THIS IS THE CORRECTED, HIGH-PERFORMANCE LOGIC ---
     try:
-        # The rank is the user's index in the list + 1
-        current_user_rank = profile_list.index(current_user_profile) + 1
-    except ValueError:
-        # This handles the case where a user might not be in the list for some reason
+        # Count how many profiles have *more* points than the current user.
+        # That number + 1 is their rank. This is a fast, indexed query.
+        current_user_rank = Profile.objects.filter(points__gt=current_user_profile.points).count() + 1
+    except Exception:
+        # This handles any failsafe case
         current_user_rank = "N/A"
         
     context = {
